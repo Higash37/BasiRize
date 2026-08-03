@@ -1,3 +1,6 @@
+package com.basirize;
+
+
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +34,10 @@ public class ArithmeticProblemGenerator{
                 p.answer());
             }
         }
-    private static int generateNumber(int minValue, int maxValue, Random random){
+    static int generateNumber(int minValue, int maxValue, Random random){
         return random.nextInt(maxValue - minValue + 1) + minValue;
     }
-    private static boolean containsQuestion(List<Problem> problems, String question){
+    static boolean containsQuestion(List<Problem> problems, String question){
         for(Problem p: problems){
             if(p.question().equals(question)){
                 return true;
@@ -42,15 +45,17 @@ public class ArithmeticProblemGenerator{
         }
         return false;
     }
-    private static List<Problem> generateProblems(int minValue, int maxValue, int questionCount, String operationType, boolean allowNegative){
+    static List<Problem> generateProblems(int minValue, int maxValue, int questionCount, String operationType, boolean allowNegative){
         Random random = new Random();
         List<Problem> problems = new ArrayList<>();
         for (int i = 0; i <questionCount; i++){
             String question;
             int answer; 
+            int operand1;
+            int operand2;
         do{
-                int operand1 = generateNumber(minValue, maxValue, random);
-                int operand2 = generateNumber(minValue, maxValue, random);
+                operand1 = generateNumber(minValue, maxValue, random);
+                operand2 = generateNumber(minValue, maxValue, random);
                 if(operationType.equals("引き算")){
                     if (!allowNegative && operand1 < operand2) {
                         int temp = operand1;
@@ -65,10 +70,10 @@ public class ArithmeticProblemGenerator{
                     answer = operand1 + operand2;
                 }
             } while(containsQuestion(problems, question));
-            problems.add(new Problem(question, answer));
+            problems.add(new Problem(operand1, operand2, question, answer));
         }
         return problems;
     }
 }
 
-record Problem(String question, int answer){}
+record Problem(int operand1, int operand2, String question, int answer){}
