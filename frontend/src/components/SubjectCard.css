@@ -1,0 +1,12 @@
+.subject-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.subject-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
