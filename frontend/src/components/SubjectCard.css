@@ -1,7 +1,7 @@
 .subject-card {
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 24px;
+    padding: 16px;
     text-align: center;
     cursor: pointer;
 }
@@ -9,4 +9,31 @@
 .subject-card.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.subject-card-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f3ec;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.subject-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.subject-card-placeholder {
+    color: #999;
+    font-size: 14px;
+}
+
+.subject-card-icon {
+    font-size: 48px;
 }
