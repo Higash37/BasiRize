@@ -12,27 +12,100 @@
   画面いっぱいの高さを安全に指定したい場面ではsvhを基本にする。
   px/rem/%で十分な細かい部品のサイズ指定には使わない。
 */
-#root {
-  min-height: 100svh;
+
+/* 
+　- --名前: 値でCSS変数（カスタムプロパティ）になる
+　- var(--名前)：定義した値を使う時の書き方
+  - :root：文章の一番外側の要素（<html>）を指す
+  - →変数はここに書く
+  - 命名は役割で付けている
+  - 余白は迷うので4の倍数でそろえている
+  - bodyはブラウザ標準余白を消すためにmargin: 0を敷いている
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* 教科カード・学年区分カード・内容カードで共通して使うグリッド */
+:root { 
+   /* 文字サイズ（1.25倍ずつ） */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.25rem;     /* 20px */
+  --font-size-xl: 1.5rem;      /* 24px */
+  --font-size-2xl: 2rem;       /* 32px */
+
+  /* 色 */
+  --color-bg: #ffffff;       /* ページ全体の地 */
+  --color-surface: #ffffff;  /* カードなどの面 */
+  --color-muted: #eef0f4;    /* 無効状態の塗り */
+  --color-border: #dcdfe5;
+  --color-text: #1b1f26;
+  --color-text-muted: #5c6470;
+  --color-accent: #264af4;
+
+  /*
+    教科の色。
+    主要5教科は日本の教科別ノートの慣習に合わせている
+    （国語=赤 / 算数=青 / 理科=緑 / 社会=黄橙）。
+    色は装飾であり、意味は教科名の文字が持つ。
+  */
+  --subject-japanese: #e03131; /* 国語 */
+  --subject-math: #1c7ed6;     /* 算数・数学 */
+  --subject-science: #2f9e44;  /* 理科 */
+  --subject-social: #f08c00;   /* 社会 */
+  --subject-english: #7048e8;  /* 英語 */
+
+  --subject-music: #c2255c;    /* 音楽 */
+  --subject-art: #e8590c;      /* 図画工作・美術 */
+  --subject-pe: #0c8599;       /* 体育・保健体育 */
+  --subject-tech: #74b816;     /* 技術・家庭 */
+  --subject-info: #495057;     /* 情報 */
+
+  --subject-ai: #4263eb;       /* AI作成（教科ではない特別枠） */
+
+  /* 余白（4の倍数で揃える） */
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* 角丸 */
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  /* 状態が変わるときの速さ */
+  --transition: 0.15s;
+
+  /* 影（浮き上がりの段階） */
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.08), 0 4px 12px rgba(16, 24, 40, 0.10);
+  --shadow-2: 0 2px 4px rgba(16, 24, 40, 0.10), 0 12px 24px rgba(16, 24, 40, 0.14);
+
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  line-height: 1.7;
+}
+
+/*
+  キーボード操作時のフォーカスリング。
+  ここで一括指定しておくと、部品ごとに書き忘れることがなくなる。
+  絶対に outline: none で消さないこと（キーボード利用者が迷子になる）。
+*/
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* カードの最小幅を130pxにして、入るだけ自動で列を作る */
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-@media (min-width: 600px) {
-  .subject-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-}
-
-@media (min-width: 900px) {
-  .subject-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--space-4);
 }
