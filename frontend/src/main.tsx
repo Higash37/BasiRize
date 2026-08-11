@@ -9,8 +9,15 @@ import {BrowserRouter} from "react-router-dom";
 import App from "./App";
 import "./index.css"
 
+// 関数: createRoot(...) → 単独で存在する
+// メソッド: obj.render(...) → 何かのオブジェクトに属している
+
+// createRoot()が返したオブジェクトのメソッドがrender()
+
+// createRoot() はreact-dom/clientパッケージからインポートしないといけない
+// documentはブラウザ本体（DOM API）が持っているのでインポート不要
 createRoot(document.getElementById("root")!).render(
-<StrictMode>
+<StrictMode>  
   <BrowserRouter>
   <App />
   </BrowserRouter>
