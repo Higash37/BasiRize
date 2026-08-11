@@ -1,7 +1,7 @@
 {
   "name": "BasiRize",
   "version": "1.0.0",
-  "description": "\\# BasiRise",
+  "description": "教師向け教材作成Webサービス",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
