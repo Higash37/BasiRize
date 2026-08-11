@@ -23,6 +23,19 @@
   - bodyはブラウザ標準余白を消すためにmargin: 0を敷いている
 */
 
+/* 
+セレクタ {
+　プロパティ: 値;
+}
+- セレクタ = どの要素に利かせるか
+- プロパティ = 何を変えるか
+- 値 = どう変えるか
+*/
+
+/*
+ページ上の全ての箱に、box-sizingとborder-boxを適用する意味
+content-boxではなくpadding や borderも内側に含めたいのでborder-boxを適応
+*/
 *,
 *::before,
 *::after {
@@ -73,7 +86,7 @@
   --space-8: 32px;
 
   /* 角丸 */
-  --radius: 12px;
+  --radius: 16px;
   --radius-sm: 8px;
 
   /* 状態が変わるときの速さ */
@@ -103,9 +116,25 @@ body {
   outline-offset: 2px;
 }
 
-/* カードの最小幅を130pxにして、入るだけ自動で列を作る */
+/* カードの最小幅を70pxにして、入るだけ自動で列を作る */
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-4);
+}
+
+/* ページ冒頭の見出しブロック。見出し1つと、必要なら説明文1つ */
+.page-intro {
+  margin-bottom: var(--space-6);
+}
+
+.page-intro h1 {
+  font-size: var(--font-size-2xl);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.page-intro p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
 }

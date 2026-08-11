@@ -1,0 +1,35 @@
+import {useNavigate} from "react-router-dom";
+import SubjectCard from "../components/SubjectCard";
+
+function GradeSelectionPage() {
+    const navigate = useNavigate();
+
+    return (
+        <>
+        <div className="page-intro">
+            <h1>学年区分を選択</h1>
+        </div>
+
+        <div className="subject-grid">
+            <SubjectCard
+            title="小学校"
+            onClick={() => navigate("/content-select?level=小学校")}
+            />
+            <SubjectCard
+            title="中学校"
+            onClick={() => navigate("/content-select?level=中学校")}
+            />
+            <SubjectCard
+            title="高校"
+            onClick={() => navigate("/content-select?level=高校")}
+            />
+            <SubjectCard
+            title="大学受験"
+            disabled
+            />
+        </div>
+        </>
+    )
+}
+
+export default GradeSelectionPage;

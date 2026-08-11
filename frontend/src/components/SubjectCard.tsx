@@ -3,7 +3,6 @@ import "./SubjectCard.css";
 // 部品が外から受け取るデータのまとまり
 type SubjectCardProps = {
     title: string;
-    icon: string;
     // カードの枠につける教科ごとの色（渡さなければ標準のグレー）
     color?: string;
     onClick?: () => void;
@@ -16,12 +15,19 @@ function SubjectCard(props: SubjectCardProps) {
         // buttonタグはキーボード操作とスクリーンリーダー対応をブラウザに任せるため
 <button
   className="subject-card"
-  style={{ borderColor: props.color }}
   onClick={props.onClick}
   disabled={props.disabled}
 >
-  <span className="subject-card-thumb" aria-hidden="true">
-    {props.icon}
+  <span 
+  className="subject-card-thumb" 
+  style={{ borderColor: props.disabled? undefined : props.color }}
+  >
+    <img 
+    className="subject-card-image" 
+    src={`https://picsum.photos/seed/${props.title}/210/297`}
+    alt="" 
+    />
+    {props.disabled && <span className="subject-card-badge">準備中</span>}
   </span>
   <span className="subject-card-title">{props.title}</span>
 </button>
