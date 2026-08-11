@@ -3,8 +3,15 @@
         "Basi",
         "basirize",
         "Dstdout",
+        "Duser",
+        "gradlew",
         "Higash",
+        "jvmargs",
         "oneline",
-        "Overengineering"
-    ]
+        "Overengineering",
+        "springframework",
+        "webmvc"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

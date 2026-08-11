@@ -68,6 +68,27 @@ tasks.withType(JavaCompile) {
 
 （参考: Git Bashのターミナル上ではこの修正後も表示が崩れて見えることがあるが、それはターミナル側の表示設定の問題であり、データ自体は正常。`output.txt`のような実ファイルで確認すれば判別できる。）
 
+### 追記：ターミナル表示側の直し方
+
+上記の「表示だけ崩れる」方の対処。Git Bash でも PowerShell でも化ける場合。
+
+原因は、**出す側と読む側の文字コードが違う**こと。
+
+- 出す側: `build.gradle` の `jvmArgs += ['-Dstdout.encoding=UTF-8']` により、JVMはUTF-8で出力している
+- 読む側: Windowsのコンソールは既定がCP932（Shift-JIS）
+
+PowerShell で実行前に1回打てば直る。
+
+```powershell
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+```
+
+`chcp 65001` だけでは足りなかった。PowerShellが子プロセスの出力を読むときに使うのは
+`[Console]::OutputEncoding` なので、そちらを合わせる必要がある。
+
+ターミナルを閉じると戻る。常時有効にしたい場合は PowerShell のプロファイル
+（`$PROFILE` のパス）に同じ行を書く。
+
 ---
 
 ## 新しいテストファイルを作ると「宣言されたパッケージが一致しない」警告が出る
