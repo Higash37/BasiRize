@@ -116,11 +116,21 @@ body {
   outline-offset: 2px;
 }
 
-/* カードの最小幅を70pxにして、入るだけ自動で列を作る */
+/* カードの最小幅で、入るだけ自動で列を作る */
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .subject-grid {
+    /* スマホでは必ず3列で固定 */
+    /* 1fr と書くとminmax(auto, 1fr)の意味になる。
+    minmax(0, 1fr)にすることで下限を明示的に0にしてる
+    */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* ページ冒頭の見出しブロック。見出し1つと、必要なら説明文1つ */
