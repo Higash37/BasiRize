@@ -1,41 +1,16 @@
+/* フォントサイズをサイト仕様に */
 .subject-card {
   font: inherit;
-  color: inherit;
-  width: 100%;
-
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: var(--space-3);
-
-  padding: var(--space-3);
+  padding: 0;
+  overflow: hidden;
   background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius);
+  border: none;
   box-shadow: var(--shadow-1);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: box-shadow var(--transition), transform var(--transition);
-}
-
-/* A4の紙そのもの。カードの幅いっぱいに広がる（左右の余白なし） */
-.subject-card-thumb {
-  width: 100%;
-  aspect-ratio: 1 / 1.414;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  /* アイコンは装飾なので、文章用の文字サイズスケールとは別に持つ */
-  font-size: 32px;
-}
-
-.subject-card-title {
-  font-size: var(--font-size-base);
-  font-weight: 700;
 }
 
 .subject-card:hover:not(:disabled) {
@@ -48,9 +23,41 @@
 }
 
 .subject-card:disabled {
-  background: var(--color-muted);
   box-shadow: none;
   color: var(--color-text-muted);
-  opacity: 0.55;
+  opacity: 0.85;
   cursor: not-allowed;
+}
+
+/* アイコンは装飾なので、文章用の文字サイズスケールとは別に持つ */
+.subject-card-thumb {
+  font-size: 32px;
+  border-bottom: 3px solid var(--color-border);
+  position: relative;
+}
+.subject-card-badge {
+  display: flex;
+  position: absolute;
+  font-size: var(--font-size-lg);
+  inset: 0;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-2);
+  background: rgba(27, 31, 38, 0.85);
+  color: var(--color-surface);
+}
+.subject-card-title {
+  font-weight: 700;
+  padding: var(--space-1);
+}
+
+.subject-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.subject-card:hover:not(:disabled) .subject-card-image {
+  transform: scale(1.03);
 }
