@@ -1,4 +1,6 @@
 import { Outlet } from "react-router-dom";
+
+// 自作
 import Header from "./Header";
 import Footer from "./Footer";
 import "./Layout.css";
@@ -7,6 +9,7 @@ import "./Layout.css";
 // <Outlet /> の場所に、今のURLに対応するページの中身が差し込まれる。
 function Layout() {
   return (
+    // ヘッダーやフッター含めたレイアウト全体
     <div className="site-layout">
       <Header />
       <main className="site-main">
