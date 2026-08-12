@@ -97,6 +97,10 @@
   column-gap: 16mm;
 }
 
+.sheet-problems-small {
+  font-size: 22px;
+}
+
 /* 1問が段や紙をまたいで分断されないようにする */
 .sheet-problems li {
   break-inside: avoid;

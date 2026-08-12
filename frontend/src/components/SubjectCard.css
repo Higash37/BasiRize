@@ -31,6 +31,7 @@
 
 /* アイコンは装飾なので、文章用の文字サイズスケールとは別に持つ */
 .subject-card-thumb {
+  aspect-ratio: 210 / 297; /* A4サイズで固定 */
   font-size: 32px;
   border-bottom: 3px solid var(--color-border);
   position: relative;

@@ -100,6 +100,12 @@ function PreviewPage() {
     );
   }
 
+  // 小学校は低学年でも読めるように大きく、中学以降は式が長いので小さくする
+  const problemClass =
+    problemType.level === "小学校"
+      ? "sheet-problems"
+      : "sheet-problems sheet-problems-small";
+
   return (
     <>
       <div className="page-intro no-print">
@@ -142,7 +148,7 @@ function PreviewPage() {
               </div>
             </div>
 
-            <ol className="sheet-problems">
+            <ol className={problemClass}>
               {pageProblems.map((problem, index) => (
                 <li key={index}>{problem.question}</li>
               ))}
@@ -160,7 +166,7 @@ function PreviewPage() {
                 </h2>
               </div>
 
-              <ol className="sheet-problems">
+              <ol className={problemClass}>
                 {pageProblems.map((problem, index) => (
                   <li key={index}>{problem.answer}</li>
                 ))}
