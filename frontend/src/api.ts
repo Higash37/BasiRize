@@ -1,7 +1,5 @@
-// バックエンドの場所を保存
-// localhost = 自分のpc, 8080: バックエンドの受付番号, const: 後から変更しない変数
-// あとで `${BASE_URL}/api/problems`とつなぎ通信先URLをつくる
-const BASE_URL = "http://localhost:8080";
+// 公開時は環境変数のURL、未設定なら開発用のlocalhostを使う
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 // サーバーが返す問題タイプ。Java の ProblemTypeSummary と同じ形
 export type ProblemTypeSummary = {

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 // ResponseStatusException: HTTPエラーを返す
 import org.springframework.web.server.ResponseStatusException;
 
-// 開発中のフロントからバックエンドへの通信を許可する目印
-@CrossOrigin(origins = "http://localhost:5173")
+// @CrossOrigin(origins = URL)でこのURLからの通信を許可するという意味を持てる
+@CrossOrigin(origins = "${app.cors.allowed-origin}")
 
 // このクラスの関数をHTTPの入口にし、戻り値をJSONへ変換している
 // List<Problem>を返すとSpringが自動でJSONへ変換する
