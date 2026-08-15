@@ -25,7 +25,7 @@ application {
     mainClass = 'com.basirize.Main'
 }
 
-springBoot {
+tasks.named('bootJar') {
     mainClass = 'com.basirize.BasirizeApplication'
 }
 
