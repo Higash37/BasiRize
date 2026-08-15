@@ -2,32 +2,43 @@ package com.basirize;
 
 import java.util.Random;
 
+// main()内の.run()メソッドでSpringを起動するため
 import org.springframework.boot.SpringApplication;
+// クラスの中の@SpringBootApplicationで起動地点だと示すため
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+// @BeanでSpringに管理させるオブジェクトを登録するため
 import org.springframework.context.annotation.Bean;
 
+// @SpringBootApplication: このクラスをバックエンド全体の起動地点として使うという目印
 @SpringBootApplication
+// アプリ起動とproblemTypeRegistryの準備
 public class BasirizeApplication {
 
     public static void main(String[] args) {
+        // SpringApplication.run(起点にするクラス, 起動時の追加設定)
+        // SpringApplication: Spring起動用クラス
+        // run(): Springを起動するメソッド
+        // → 対象パッケージを検索（com.basirize）
+        // → @RestControllerや@Beanの定義を発見
+        // → 必要なオブジェクトを順番に生成
+        // BasirizeApplication.class: 起動設定の中心クラスを指定
+        // args: 起動時に渡された追加設定
         SpringApplication.run(BasirizeApplication.class, args);
     }
 
-    // ------------------------------------------------------------
-    // @Bean：Springに「これを1つ作って管理してくれ」と頼む印
-    // ------------------------------------------------------------
-    // 起動時にこのメソッドが1回だけ呼ばれ、戻り値がSpringの中に保管される。
-    // ProblemController のコンストラクタが ProblemTypeRegistry を要求すると、
-    // Springがここで作ったものを渡す。これがDI（依存性の注入）。
-    //
-    // Controller が自分で new しないので、テスト時には別の Registry
-    // （例：new Random(42) を使ったもの）に差し替えられる。
-    //
-    // Registry 側に印を付けず、ここで作っているのは、
-    // 生成ロジック側に org.springframework を一切入れないため。
-    // ------------------------------------------------------------
+    // @Bean: problemTypeRegistry()で全問題タイプをSpringへ登録する
+    // Registry内部には全問題タイプが保存されている
+    // Springは登録したRegistryをProblemControllerへ渡す
     @Bean
+    // 起動時にSpringがこの関数を呼ぶ
+    // ProblemTypeRegistry: 返す型
+    // problemTypeRegistry(): 関数名
+    //
     ProblemTypeRegistry problemTypeRegistry() {
+        // new Random()で乱数生成器を作る
+        // Registryのコンストラクタに渡す
+        // ProblemTypeRegistry()で新しい台帳を作る
+        // return で Springへ返す
         return new ProblemTypeRegistry(new Random());
     }
 }
