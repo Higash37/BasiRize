@@ -1,19 +1,27 @@
 {
     "cSpell.words": [
+        "appname",
         "Basi",
         "basirize",
+        "CDPATH",
+        "Dorg",
         "Dstdout",
         "Duser",
+        "Flexbox",
         "foojay",
         "gradlew",
         "Higash",
+        "JAVACMD",
         "jvmargs",
+        "metacharacter",
         "oneline",
         "Overengineering",
         "println",
+        "shellness",
         "springframework",
+        "temurin",
         "webmvc"
     ],
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
