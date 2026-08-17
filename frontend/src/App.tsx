@@ -9,9 +9,22 @@ import ContentSelectionPage from "./pages/ContentSelectionPage";
 import OptionsPage from "./pages/OptionsPage";
 import PreviewPage from "./pages/PreviewPage";
 
+function ErrorButton() {
+  return (
+    <button
+    onClick={() => {
+      throw new Error("Sentry production test");
+    }}
+    >
+      Break the world
+    </button>
+  );
+}
+
 function App() {
   return (
     <Routes>
+      <Route path="/sentry-test" element={<ErrorButton />}></Route>
       {/* レイアウトルート */}
       {/* 中のどれかが選ばれたら必ず<Layout />で囲む書き方 */}
       <Route element={<Layout />}>
