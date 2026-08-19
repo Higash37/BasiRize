@@ -7,8 +7,8 @@ import java.util.Random;
 // ============================================================
 // 中1の内容（学習指導要領では一元一次方程式は中1）。
 //
-//   3x + 5 = 14 のとき、x = ?      答え: 3
-//   4x - 7 = 1 のとき、x = ?       答え: 2
+//   3x + 5 = 14 のとき、x =      答え: 3
+//   4x - 7 = 1 のとき、x =    答え: 2
 //
 // ------------------------------------------------------------
 // 答えから逆算して作る
@@ -55,7 +55,7 @@ class LinearEquationGenerator extends ProblemGenerator {
 
         String question = Polynomial.withVariable(coefficient, "x")
                 + Polynomial.signedTerm(constant, "")
-                + " = " + rightSide + " のとき、x = ?";
+                + " = " + rightSide + " のとき、x = ";
 
         return new Problem(question, String.valueOf(solution));
     }

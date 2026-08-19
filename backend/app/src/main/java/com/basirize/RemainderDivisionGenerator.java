@@ -30,7 +30,7 @@ class RemainderDivisionGenerator extends ProblemGenerator {
         int dividend = divisor * quotient + remainder;
 
         return new Problem(
-                dividend + " ÷ " + divisor + " = ?",
+                dividend + " ÷ " + divisor + " = ",
                 quotient + " あまり " + remainder);
     }
 }

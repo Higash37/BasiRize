@@ -8,8 +8,8 @@ import java.util.Random;
 // ============================================================
 // 中3「平方根」。根号の中が同じもの同士をまとめる計算。
 //
-//   2√3 + 5√3 = ?     答え: 7√3
-//   8√2 - 3√2 = ?     答え: 5√2
+//   2√3 + 5√3 =     答え: 7√3
+//   8√2 - 3√2 =     答え: 5√2
 //
 // ------------------------------------------------------------
 // 同類項と同じ考え方
@@ -60,7 +60,7 @@ class SquareRootGenerator extends ProblemGenerator {
             String root = "√" + radicand;
             String question = Polynomial.withVariable(a, root)
                     + " " + operator.symbol() + " "
-                    + Polynomial.withVariable(b, root) + " = ?";
+                    + Polynomial.withVariable(b, root) + " = ";
 
             return new Problem(question, Polynomial.withVariable(result, root));
         }

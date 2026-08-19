@@ -31,7 +31,7 @@ class ArithmeticGenerator extends ProblemGenerator {
         // randomExpression(式の項数)で計算式を作る
         Expression e = randomExpression(termCount);
         // 式をe.text()としてProblemに返す, 計算結果を答えとして返す
-        return new Problem(e.text() + " = ?", String.valueOf(e.value()));
+        return new Problem(e.text() + " = ", String.valueOf(e.value()));
     }
 
     //
@@ -71,13 +71,11 @@ class ArithmeticGenerator extends ProblemGenerator {
         }
 
         // 項数3の場合
-        // leftTerms = (randomNumber(1, 2))
+        // 左項を1項か2項で指定する
         int leftTerms = randomNumber(1, termCount - 1);
         // rightTerms = 3 - 1 or 3- 2
         int rightTerms = termCount - leftTerms;
 
-        // 検査つきの randomExpression を呼ぶので、左右は作られた時点で合格している。
-        // 最後に自分の演算子だけ確認すれば済み、作り直しの範囲も小さくなる。
         // leftTerms = 2の場合、
         Expression left = randomExpression(leftTerms);
         Operator operator = randomOperator();

@@ -32,7 +32,7 @@ class ExactDivisionGenerator extends ProblemGenerator {
         int dividend = divisor * quotient;
 
         return new Problem(
-                dividend + " ÷ " + divisor + " = ?",
+                dividend + " ÷ " + divisor + " =",
                 String.valueOf(quotient));
     }
 }

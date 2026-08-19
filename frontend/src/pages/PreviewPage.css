@@ -86,6 +86,7 @@
   display: inline-block;
   min-width: 40mm;
   border-bottom: 1px solid var(--color-text);
+  text-align: right;
 }
 
 .sheet-problems {
@@ -93,6 +94,10 @@
   padding-left: 1.5em;
   font-size: 30px;
   line-height: 2.6;
+  /* <ol>が作る番号を消して①というような表示にする */
+  list-style: none;
+  /* カウンターを作り、初期値へ戻すプロパティ。今回は問題番号を振るために実装 */
+  counter-reset: problem-number;
   column-count: 2;
   column-gap: 16mm;
 }
@@ -104,8 +109,23 @@
 /* 1問が段や紙をまたいで分断されないようにする */
 .sheet-problems li {
   break-inside: avoid;
+  /* 指定したカウンターを増やすプロパティ。liタグの要素ごとに1つ増える */
+  counter-increment: problem-number;
 }
 
+/* ::beforeによる擬似要素content: counter(名前)でliタグ先頭に問題番号をつける */
+.sheet-problems li::before {
+  content: counter(problem-number);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: var(--space-2);
+  border: 1px solid var(--color-text);
+  border-radius: 50%;
+  font-size: 0.95em;
+}
 /* ── 印刷時 ─────────────────────────────── */
 
 @page {
