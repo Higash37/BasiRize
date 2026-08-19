@@ -7,6 +7,7 @@ import {
   type ProblemTypeSummary,
 } from "../api";
 import "./PreviewPage.css";
+import { trackWorksheetGenerated } from "../analytics";
 
 // URLから来た文字列を正の整数に直す。おかしければ既定値を返す
 function toPositiveInt(value: string | null, fallback: number): number {
@@ -50,6 +51,9 @@ function PreviewPage() {
         if (!found) {
           throw new Error(`該当する問題タイプがありません: ${typeId}`);
         }
+
+        trackWorksheetGenerated();
+        
         setProblemType(found);
         setProblems(data);
         setStatus("ready");
