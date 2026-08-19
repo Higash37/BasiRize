@@ -19,3 +19,16 @@
   margin: 0 auto;
   padding: var(--space-2);
 }
+
+@media print {
+  .site-layout {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .site-scroll-area {
+    display: block;
+    overflow: visible;
+  }
+}
