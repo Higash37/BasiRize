@@ -43,10 +43,10 @@ class LikeTermsGenerator extends ProblemGenerator {
 
             // Polynomial.withVariable(a = 5, "x"),
             // Polynomial.withVariable(b = 3, "x"),
-            // question = 5x - 3x = ?
+            // question = 5x - 3x =
             String question = Polynomial.withVariable(a, "x")
                     + " " + operator.symbol() + " "
-                    + Polynomial.withVariable(b, "x") + " = ?";
+                    + Polynomial.withVariable(b, "x") + " =";
 
             // resultの答えに文字を付与する
             // 同類項の計算のため、計算の結果に文字を足すだけで生成

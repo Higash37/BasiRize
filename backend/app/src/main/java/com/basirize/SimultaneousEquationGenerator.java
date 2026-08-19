@@ -7,7 +7,7 @@ import java.util.Random;
 // ============================================================
 // 中2「連立二元一次方程式」。
 //
-//   2x + 3y = 12, 4x - y = 10 のとき、x, y = ?     答え: x = 3, y = 2
+//   2x + 3y = 12, 4x - y = 10 のとき、x, y =    答え: x = 3, y = 2
 //
 // ------------------------------------------------------------
 // 答えから逆算して作る
@@ -71,7 +71,7 @@ class SimultaneousEquationGenerator extends ProblemGenerator {
                     + Polynomial.signedTerm(-b2, "y") + " = " + c2;
 
             return new Problem(
-                    first + ", " + second + " のとき、x, y = ?",
+                    first + ", " + second + " のとき、x =  y = ",
                     "x = " + x + ", y = " + y);
         }
         throw new IllegalStateException("連立方程式の問題を作れませんでした");

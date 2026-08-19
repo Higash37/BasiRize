@@ -52,8 +52,8 @@ GET /api/problems?typeId=e1-add-sub&count=20
 
 ```json
 [
-  { "question": "3 + 5 = ?", "answer": "8" },
-  { "question": "7 - 2 = ?", "answer": "5" }
+  { "question": "3 + 5 = ", "answer": "8" },
+  { "question": "7 - 2 = ", "answer": "5" }
 ]
 ```
 

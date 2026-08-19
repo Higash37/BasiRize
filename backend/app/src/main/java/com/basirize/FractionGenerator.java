@@ -64,7 +64,7 @@ class FractionGenerator extends ProblemGenerator {
                 continue;
             }
 
-            String question = firstText + " " + operator.symbol() + " " + secondText + " = ?";
+            String question = firstText + " " + operator.symbol() + " " + secondText + " =";
             return new Problem(question, answer.text());
         }
         throw new IllegalStateException("条件を満たす分数の問題を作れませんでした");

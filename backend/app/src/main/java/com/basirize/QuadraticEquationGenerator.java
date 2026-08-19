@@ -7,8 +7,8 @@ import java.util.Random;
 // ============================================================
 // 中3「二次方程式」。因数分解で解ける形だけを扱う。
 //
-//   x² - 5x + 6 = 0 のとき、x = ?     答え: x = 2, 3
-//   x² - 9 = 0 のとき、x = ?          答え: x = -3, 3
+//   x² - 5x + 6 = 0 のとき、x =      答え: x = 2, 3
+//   x² - 9 = 0 のとき、x =          答え: x = -3, 3
 //
 // ------------------------------------------------------------
 // 解から逆算して作る
@@ -54,7 +54,7 @@ class QuadraticEquationGenerator extends ProblemGenerator {
 
             // (x - r1)(x - r2) = x² - (r1 + r2)x + r1r2
             String question = Polynomial.quadratic(-(root1 + root2), root1 * root2)
-                    + " = 0 のとき、x = ?";
+                    + " = 0 のとき、x = ";
 
             String answer = root1 == root2
                     ? "x = " + root1
