@@ -8,8 +8,11 @@ import {createRoot} from "react-dom/client";
 import {BrowserRouter} from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import App from "./App";
-import "./index.css"
+import "./index.css";
+import { initializeAnalytics } from "./analytics";
 
+
+initializeAnalytics();
 // エラーを検知するための追加設定
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
