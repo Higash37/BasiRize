@@ -12,10 +12,12 @@ function Layout() {
     // ヘッダーやフッター含めたレイアウト全体
     <div className="site-layout">
       <Header />
-      <main className="site-main">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="site-scroll-area">
+        <main className="site-main">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

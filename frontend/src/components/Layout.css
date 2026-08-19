@@ -1,9 +1,17 @@
 .site-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
 }
 
+.site-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+  display: flex;
+  flex-direction: column;
+}
 .site-main {
   flex: 1;
   width: 100%;
