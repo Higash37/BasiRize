@@ -1,5 +1,11 @@
 # API_DESIGN
 
+> [!NOTE]
+> これはJavaバックエンドを利用していた時点の旧設計資料です。
+> Issue #50で問題生成をブラウザ内のTypeScriptへ移行したため、現在の実装では
+> ここに記載されたHTTP APIを使用しません。現行設計は
+> [`PROBLEM_GENERATION_DESIGN.md`](./PROBLEM_GENERATION_DESIGN.md)を参照してください。
+
 フロントエンド（React）とバックエンド（Java）の受け渡し仕様。
 
 **現時点では未実装。** バックエンドに Spring Boot が入っておらず、HTTP の入り口がない。
@@ -9,12 +15,12 @@
 
 ## 現状
 
-| 層 | 状態 |
-|---|---|
-| 問題を作るロジック（Java） | 完成。21種類 |
-| id・学年などのメタ情報 | 無い |
-| HTTP の入り口 | 無い |
-| フロントの受け取り画面 | 無い（`problemGenerator.ts` はどこからも import されていない） |
+| 層                         | 状態                                                           |
+| -------------------------- | -------------------------------------------------------------- |
+| 問題を作るロジック（Java） | 完成。21種類                                                   |
+| id・学年などのメタ情報     | 無い                                                           |
+| HTTP の入り口              | 無い                                                           |
+| フロントの受け取り画面     | 無い（`problemGenerator.ts` はどこからも import されていない） |
 
 フロントの `src/utils/problemGenerator.ts` は、バックエンドが繋がるまでの暫定実装。
 繋がった時点で捨てる。
@@ -78,37 +84,37 @@ GET /api/problems?typeId=e1-add-sub&count=20
 **移行中は id をフロントと完全に一致させる。** 一覧はフロント、生成はサーバー、
 という混在状態でも矛盾なく動かせるようにするため。
 
-| id | 学年 | タイトル | Java 側 |
-|---|---|---|---|
-| `e1-add-sub` | 小1 | たし算・ひき算（くり上がりなし） | `ArithmeticGenerator` + `Curriculum.grade1AddSubtract()` |
-| `e2-add-sub-carry` | 小2 | たし算・ひき算（くり上がりあり） | `ArithmeticGenerator` + `grade2AddSubtract()` |
-| `e2-multiplication-table` | 小2 | かけ算九九 | `ArithmeticGenerator` + `grade2MultiplicationTable()` |
-| `e3-multiplication-division` | 小3 | かけ算・わり算 | **要検討**（下記） |
-| `e4-mixed` | 小4 | 四則混合（3口の計算） | `ArithmeticGenerator` + `grade4Mixed()` |
-| `e5-mixed-advanced` | 小5 | 四則混合（発展） | `ArithmeticGenerator` + `grade5Mixed()` |
-| `e6-mixed-final` | 小6 | 四則混合（総まとめ） | `ArithmeticGenerator` + `grade6Mixed()` |
-| `j1-signed-numbers` | 中1 | 正負の数の計算 | `ArithmeticGenerator` + `juniorHigh1SignedNumbers()` |
-| `j1-like-terms` | 中1 | 文字式（同類項をまとめる） | `LikeTermsGenerator` |
-| `j1-linear-equation` | 中1 | 一次方程式 | `LinearEquationGenerator` |
-| `j2-simultaneous-equations` | 中2 | 連立方程式 | `SimultaneousEquationGenerator` |
-| `j3-expansion` | 中3 | 式の展開 | `ExpansionGenerator` |
-| `j3-factoring` | 中3 | 因数分解 | `FactoringGenerator(maxRoot=9)` |
-| `j3-quadratic-equation` | 中3 | 二次方程式 | `QuadraticEquationGenerator(maxRoot=9)` |
-| `j3-square-root` | 中3 | 平方根の計算 | `SquareRootGenerator` |
-| `h1-factoring-advanced` | 高1 | 因数分解（発展） | `FactoringGenerator(maxRoot=15)` |
-| `h1-quadratic-equation` | 高1 | 二次方程式 | `QuadraticEquationGenerator(maxRoot=15)` |
+| id                           | 学年 | タイトル                         | Java 側                                                  |
+| ---------------------------- | ---- | -------------------------------- | -------------------------------------------------------- |
+| `e1-add-sub`                 | 小1  | たし算・ひき算（くり上がりなし） | `ArithmeticGenerator` + `Curriculum.grade1AddSubtract()` |
+| `e2-add-sub-carry`           | 小2  | たし算・ひき算（くり上がりあり） | `ArithmeticGenerator` + `grade2AddSubtract()`            |
+| `e2-multiplication-table`    | 小2  | かけ算九九                       | `ArithmeticGenerator` + `grade2MultiplicationTable()`    |
+| `e3-multiplication-division` | 小3  | かけ算・わり算                   | **要検討**（下記）                                       |
+| `e4-mixed`                   | 小4  | 四則混合（3口の計算）            | `ArithmeticGenerator` + `grade4Mixed()`                  |
+| `e5-mixed-advanced`          | 小5  | 四則混合（発展）                 | `ArithmeticGenerator` + `grade5Mixed()`                  |
+| `e6-mixed-final`             | 小6  | 四則混合（総まとめ）             | `ArithmeticGenerator` + `grade6Mixed()`                  |
+| `j1-signed-numbers`          | 中1  | 正負の数の計算                   | `ArithmeticGenerator` + `juniorHigh1SignedNumbers()`     |
+| `j1-like-terms`              | 中1  | 文字式（同類項をまとめる）       | `LikeTermsGenerator`                                     |
+| `j1-linear-equation`         | 中1  | 一次方程式                       | `LinearEquationGenerator`                                |
+| `j2-simultaneous-equations`  | 中2  | 連立方程式                       | `SimultaneousEquationGenerator`                          |
+| `j3-expansion`               | 中3  | 式の展開                         | `ExpansionGenerator`                                     |
+| `j3-factoring`               | 中3  | 因数分解                         | `FactoringGenerator(maxRoot=9)`                          |
+| `j3-quadratic-equation`      | 中3  | 二次方程式                       | `QuadraticEquationGenerator(maxRoot=9)`                  |
+| `j3-square-root`             | 中3  | 平方根の計算                     | `SquareRootGenerator`                                    |
+| `h1-factoring-advanced`      | 高1  | 因数分解（発展）                 | `FactoringGenerator(maxRoot=15)`                         |
+| `h1-quadratic-equation`      | 高1  | 二次方程式                       | `QuadraticEquationGenerator(maxRoot=15)`                 |
 
 ### フロントにまだ無い問題タイプ
 
 Java 側だけにあるもの。フロントに追加するときに id を決める。
 
-| 学年 | 内容 | Java 側 | id 案 |
-|---|---|---|---|
-| 小3 | わり算（九九の逆） | `ExactDivisionGenerator` | `e3-division` |
-| 小3 | あまりのあるわり算 | `RemainderDivisionGenerator` | `e3-division-remainder` |
-| 小4 | 同分母の分数の加減 | `FractionGenerator(sameDenominator=true)` | `e4-fraction-add-subtract` |
-| 小5 | 異分母の分数の加減 | `FractionGenerator(sameDenominator=false)` | `e5-fraction-add-subtract` |
-| 小6 | 分数のかけ算・わり算 | `FractionGenerator([MULTIPLY, DIVIDE])` | `e6-fraction-multiply-divide` |
+| 学年 | 内容                 | Java 側                                    | id 案                         |
+| ---- | -------------------- | ------------------------------------------ | ----------------------------- |
+| 小3  | わり算（九九の逆）   | `ExactDivisionGenerator`                   | `e3-division`                 |
+| 小3  | あまりのあるわり算   | `RemainderDivisionGenerator`               | `e3-division-remainder`       |
+| 小4  | 同分母の分数の加減   | `FractionGenerator(sameDenominator=true)`  | `e4-fraction-add-subtract`    |
+| 小5  | 異分母の分数の加減   | `FractionGenerator(sameDenominator=false)` | `e5-fraction-add-subtract`    |
+| 小6  | 分数のかけ算・わり算 | `FractionGenerator([MULTIPLY, DIVIDE])`    | `e6-fraction-multiply-divide` |
 
 ### 要検討：`e3-multiplication-division`
 
