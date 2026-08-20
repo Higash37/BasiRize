@@ -1,0 +1,56 @@
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import SubjectCard from "../components/SubjectCard";
+import { getProblemTypes } from "../problem-generation";
+
+function ContentSelectionPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const level = searchParams.get("level");
+  const types = level ? getProblemTypes(level) : [];
+
+  if (!level) {
+    return (
+      <div className="page-intro">
+        <h1>学年区分が指定されていません</h1>
+        <p>
+          <Link to="/grade-select">学年区分を選び直す</Link>
+        </p>
+      </div>
+    );
+  }
+
+  if (types.length === 0) {
+    return (
+      <div className="page-intro">
+        <h1>該当する内容がありません</h1>
+        <p>「{level}」に対応する問題がまだ用意されていません。</p>
+        <p>
+          <Link to="/grade-select">学年区分を選び直す</Link>
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="page-intro">
+        <h1>内容を選んでください</h1>
+        <p>
+          {level}／{types.length}種類
+        </p>
+      </div>
+
+      <div className="subject-grid">
+        {types.map((type) => (
+          <SubjectCard
+            key={type.id}
+            title={`${type.grade}：${type.title}`}
+            onClick={() => navigate(`/options?typeId=${type.id}`)}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
+export default ContentSelectionPage;
