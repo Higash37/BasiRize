@@ -1,25 +1,16 @@
 <!doctype html>
-<!-- スクリーンリーダーに日本語で読ませるため -->
 <html lang="ja">
   <head>
-    <!-- 文字コード宣言 -->
-     <!-- フォントの字形が日本語に -->
     <meta charset="UTF-8" />
-    <!-- タブにでるアイコン -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- width=device-width: 表示領域の幅を、端末の実際の幅に合わせる -->
-     <!-- initial-scale=1.0: 初期倍率を1倍にする -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BasiRize（ベーシライズ）</title>
+    <title>算数・数学の計算・基礎問題プリントを自動生成 | BasiRize（ベーシライズ）</title>
+    <meta 
+    name="description" 
+    content="算数・数学の計算・基礎問題をかんたん操作でランダム生成。問題数や解答の有無を選び、生徒に渡すプリントをすぐに印刷・PDF保存できます。" />
   </head>
   <body>
-
-    <!-- #rootにJavaScriptがHTML要素（DOM）を差し込んでいる -->
-    <!-- HTMLファイルはこの1枚 -->
-    <!-- サーバーから新しいHTMLを取得しているわけでもなく、JavaScriptが#rootの中身を変えているだけ -->
-    <!-- SPA（Single Page Application）という -->
     <div id="root"></div>
-    <!-- scriptタグでJSで始めに開くファイルを指定 -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
