@@ -1,9 +1,10 @@
 import "./SubjectCard.css";
-
+import noImage from "../assets/no-image.webp";
 type SubjectCardProps = {
   title: string;
   // 画像の下線につける教科色。未指定なら --color-border のグレー
   color?: string;
+  imageSrc?: string;
   onClick?: () => void;
   disabled?: boolean;
 };
@@ -24,7 +25,7 @@ function SubjectCard(props: SubjectCardProps) {
         {/* 仮画像。title を seed にして絵を固定している。210/297 は A4 比。装飾なので alt は空 */}
         <img
           className="subject-card-image"
-          src={`https://picsum.photos/seed/${props.title}/210/297`}
+          src={props.imageSrc ?? noImage}
           alt=""
         />
         {props.disabled && <span className="subject-card-badge">準備中</span>}
