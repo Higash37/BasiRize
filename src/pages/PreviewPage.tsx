@@ -121,57 +121,59 @@ function PreviewPage() {
       </div>
 
       <div className="preview-sheets">
-        {pages.map((pageProblems, pageIndex) => (
-          <section key={`question-${pageIndex}`} className="sheet">
-            <div className="sheet-header">
-              <h2 className="sheet-title">
-                {problemType.title}
-                {pages.length > 1 && `（${pageIndex + 1}/${pages.length}）`}
-              </h2>
-
-              <div className="sheet-meta">
-                <div className="sheet-meta-row">
-                  <span className="sheet-meta-label">日付</span>
-                  <span className="sheet-meta-line" />
-                </div>
-                <div className="sheet-meta-row">
-                  <span className="sheet-meta-label">なまえ</span>
-                  <span className="sheet-meta-line" />
-                </div>
-                <div className="sheet-meta-row">
-                  <span className="sheet-meta-label">とくてん</span>
-                  <span className="sheet-meta-line">
-                    ／ {pageProblems.length}もん
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <ol className={problemClass}>
-              {pageProblems.map((problem, index) => (
-                <li key={index}>{problem.question}</li>
-              ))}
-            </ol>
-          </section>
-        ))}
-
-        {includeAnswers &&
-          pages.map((pageProblems, pageIndex) => (
-            <section key={`answer-${pageIndex}`} className="sheet">
+        <div className="sheet-frame">
+          {pages.map((pageProblems, pageIndex) => (
+            <section key={`question-${pageIndex}`} className="sheet">
               <div className="sheet-header">
                 <h2 className="sheet-title">
-                  解答
+                  {problemType.title}
                   {pages.length > 1 && `（${pageIndex + 1}/${pages.length}）`}
                 </h2>
+
+                <div className="sheet-meta">
+                  <div className="sheet-meta-row">
+                    <span className="sheet-meta-label">日付</span>
+                    <span className="sheet-meta-line" />
+                  </div>
+                  <div className="sheet-meta-row">
+                    <span className="sheet-meta-label">なまえ</span>
+                    <span className="sheet-meta-line" />
+                  </div>
+                  <div className="sheet-meta-row">
+                    <span className="sheet-meta-label">とくてん</span>
+                    <span className="sheet-meta-line">
+                      ／ {pageProblems.length}もん
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <ol className={problemClass}>
                 {pageProblems.map((problem, index) => (
-                  <li key={index}>{problem.answer}</li>
+                  <li key={index}>{problem.question}</li>
                 ))}
               </ol>
             </section>
           ))}
+
+          {includeAnswers &&
+            pages.map((pageProblems, pageIndex) => (
+              <section key={`answer-${pageIndex}`} className="sheet">
+                <div className="sheet-header">
+                  <h2 className="sheet-title">
+                    解答
+                    {pages.length > 1 && `（${pageIndex + 1}/${pages.length}）`}
+                  </h2>
+                </div>
+
+                <ol className={problemClass}>
+                  {pageProblems.map((problem, index) => (
+                    <li key={index}>{problem.answer}</li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+        </div>
       </div>
     </>
   );
