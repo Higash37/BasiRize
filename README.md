@@ -1,53 +1,98 @@
-# BasiRize
-
-Teacher Worksheet Generation Platform
-
-BasiRize is a web service that helps teachers create printable worksheets by specifying conditions such as topic, difficulty, and number of questions.
-
-The long-term goal is to reduce the time teachers spend preparing materials and allow them to focus more on teaching.
-
 # BasiRize（ベーシライズ）
 
-教師向け教材作成Webサービス
+**生徒に合わせた基礎問題プリントを、必要なときに必要な分だけ作るWebサービスです。**
+現在は算数・数学のみとなっています。
 
-BasiRizeは、学年・単元・難易度・問題数などの条件を指定することで、印刷可能な演習プリントを作成できるWebサービスです。
+[BasiRizeを使ってみる](https://basirise.com/)
 
-将来的には、教材作成にかかる時間を減らし、教師がより生徒と向き合える時間を増やすことを目指します。
+## なぜ作ったのか
 
-## Current architecture
+**同じレベルの問題を指定の数生成するサイトがなかったからです**
 
-BasiRize is a client-side React application. Problem types and worksheets are generated locally in the browser with TypeScript, so no application backend is required.
+大学4年次、2026年4月~2026年8月、私は個別指導塾で教室運営を担当していました。80名規模の教室で3か月、その後40名規模の教室と新規開校の教室の2教室に関わっていました。その中で、新しく入った講師をはじめ、10名以上の講師から教材についての悩みを聞く機会がありました。
+
+特に多かったのが、「同じレベルの問題を繰り返し解けるプリントが少ない」という悩みです。
+どの教材を使えばいいかという選択肢の質問も多かったですが、宿題として何をだせばよいか、授業と同じかつ1人で解ける問題を出すには？という点で悩む講師は多くいらっしゃいました。
+
+私自身、公文で同じレベルの問題を数多く解いたことで、計算力が身につき、成績が上がった経験があります。また、以前自身が担当していた生徒も、繰り返し問題を解くことで計算スピードが向上し、テストの点数が20点から60点まで上がったということがありました。
+
+計算プリントを掲載しているWebサイトはすでにあります。しかし、学年や単元、問題数などを選び、必要な分だけ新しい問題を作れるサービスは、私が探した範囲では見つけられませんでした。
+
+そこで、講師が生徒の状況に合わせて、同じレベルの問題を繰り返し用意できるようにするため、BasiRizeを作りました。
+
+## BasiRizeでできること
+
+- 学年と単元を選んで問題を生成する
+- 1ページあたりの問題数とページ数を指定する
+- 解答の有無を選ぶ
+- 生成した問題と解答をプレビューする
+- プリントとして印刷する、またはPDFで保存する
+- 同じ条件から異なる問題を繰り返し生成する
+
+現在は、算数・数学の基礎的な計算問題を中心に対応しています。
+
+## 使い方
+
+1. 教科を選ぶ
+2. 学年を選ぶ
+3. 取り組みたい単元を選ぶ
+4. ページ数・問題数・解答の有無を設定する
+5. プレビューを確認し、印刷またはPDFで保存する
+
+## 大切にしていること
+
+### 教材を探す時間を減らす
+
+講師がプリントを探したり、一問ずつ作ったりする時間を減らし、生徒と向き合う時間を増やすことを目指しています。
+BasiRizeを使えば、教材から基礎問題ページを探して印刷するのではなく、速ければ15秒以内に印刷可能です。
+
+### 同じ難易度を繰り返せるようにする
+
+一度解いて終わる教材ではなく、理解できるまで同じレベルの問題へ繰り返し取り組めることを重視しています。
+
+### 誰でも迷わず使えるようにする
+
+大学生の講師からベテランの講師まで利用することを想定し、少ない操作でプリントを作れる画面を目指しています。
+
+## 現在の構成
+
+BasiRizeは、TypeScriptとReactで作ったクライアントサイドアプリケーションです。
+Javaで問題生成部分を始め作っていたのですが、作成者が無知なこととすぐに導入し活用いただきたかったため、MDNやサバイバルTypeScriptなど**日本語**の教材が充実しているTypeScript × Reactを選びました。
+
+問題生成もブラウザ内で行うため、問題を作るためのアプリケーションバックエンドやデータベースは使用していません。
 
 ```text
-React pages → TypeScript problem generators → printable worksheet
+条件を選ぶ
+  ↓
+TypeScriptで問題を生成する
+  ↓
+Reactでプリントを表示する
+  ↓
+印刷またはPDFで保存する
 ```
 
-## ローカル起動
+### 使用技術
 
-```bash
-npm install
-npm run dev
-```
+- TypeScript
+- React
+- Vite
+- React Router
+- Sentry
+- Render
 
-## 確認
+問題生成の詳しい設計は、[PROBLEM_GENERATION_DESIGN.md](./PROBLEM_GENERATION_DESIGN.md)にまとめています。
 
-```bash
-npm test
-npm run build
-npm run lint
-```
+## 今後取り組みたいこと
 
-問題生成の設計は [`PROBLEM_GENERATION_DESIGN.md`](./PROBLEM_GENERATION_DESIGN.md) を参照してください。
+- 対応する教科・学年・単元を増やす
+- 実際に利用した講師から意見を集める
+- スマートフォンでもプレビューしやすくする
+- 問題の難易度や出題条件をより細かく選べるようにする
 
-## Render設定
+この項目は、開発状況や利用者からの意見に合わせて更新していきます。
 
-Reactアプリはリポジトリのルートに配置している。
+## ご意見・お問い合わせ
 
-| 項目 | 設定値 |
-| --- | --- |
-| Root Directory | 空欄 |
-| Build Command | `npm install && npm run build` |
-| Publish Directory | `dist` |
+不具合や改善案は、[GitHub Issues](https://github.com/Higash37/BasiRize/issues)または[フィードバックフォーム](https://forms.gle/aQtBaYdcyHXPDixk8)からお寄せください。
 
-React Routerの画面を直接開いた場合にも `index.html` を返すため、
-`/*` から `/index.html` へのRewriteルールを設定する。
+実際に教材を準備する方の意見をもとに、少しずつ改善していきたいと考えています。
