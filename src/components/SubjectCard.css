@@ -10,7 +10,8 @@
   box-shadow: var(--shadow-1);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition: box-shadow var(--transition);
+  user-select: none;
 }
 
 .subject-card:hover:not(:disabled) {
@@ -19,7 +20,6 @@
 
 .subject-card:active:not(:disabled) {
   box-shadow: var(--shadow-1);
-  transform: translateY(1px);
 }
 
 .subject-card:disabled {
@@ -56,7 +56,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s;
 }
 
 .subject-card:hover:not(:disabled) .subject-card-image {
