@@ -1,5 +1,8 @@
 const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
+// ブラウザの`window`にGA4用の機能が存在することをTypeScriptに教示
+// 通常はwindow.documentやwindow.locationなどしかないが、dataLayerやgtagを追加する
+// declare global で既存のブラウザのWindow型へ情報を追加
 declare global {
   interface Window {
     dataLayer: IArguments[];
@@ -22,8 +25,7 @@ export function initializeAnalytics() {
 
   const script = document.createElement("script");
   script.async = true;
-  script.src =
-    `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
 
   document.head.appendChild(script);
 
@@ -37,4 +39,26 @@ export function trackWorksheetGenerated() {
   }
 
   window.gtag?.("event", "worksheet_generated");
+}
+
+type PrintEventParams = {
+  typeId: string;
+  pageCount: number;
+  questionsPerPage: number;
+  totalQuestions: number;
+  includeAnswers: boolean;
+};
+
+export function trackPrintClicked(params: PrintEventParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "print_clicked", {
+    type_id: params.typeId,
+    page_count: params.pageCount,
+    questions_per_page: params.questionsPerPage,
+    total_questions: params.totalQuestions,
+    include_answers: params.includeAnswers,
+  });
 }

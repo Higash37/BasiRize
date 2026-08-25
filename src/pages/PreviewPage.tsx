@@ -7,7 +7,7 @@ import {
   type ProblemTypeSummary,
 } from "../problem-generation";
 import "./PreviewPage.css";
-import { trackWorksheetGenerated } from "../analytics";
+import { trackPrintClicked, trackWorksheetGenerated } from "../analytics";
 
 // URLから来た文字列を正の整数に直す。おかしければ既定値を返す
 function toPositiveInt(value: string | null, fallback: number): number {
@@ -97,6 +97,17 @@ function PreviewPage() {
 
   const problemType: ProblemTypeSummary = generation.problemType;
 
+  function handlePrint() {
+    trackPrintClicked({
+      typeId: problemType.id,
+      pageCount,
+      questionsPerPage: perPage,
+      totalQuestions: pageCount * perPage,
+      includeAnswers,
+    });
+    window.print();
+  }
+
   // 小学校は低学年でも読めるように大きく、中学以降は式が長いので小さくする
   const problemClass =
     problemType.level === "小学校"
@@ -114,7 +125,7 @@ function PreviewPage() {
       </div>
 
       <div className="preview-toolbar no-print">
-        <button className="preview-print" onClick={() => window.print()}>
+        <button className="preview-print" onClick={handlePrint}>
           印刷 / PDF保存
         </button>
         <Link to="/grade-select">条件を選び直す</Link>
