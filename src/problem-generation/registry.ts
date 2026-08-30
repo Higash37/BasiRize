@@ -1,9 +1,4 @@
-import {
-  ArithmeticGenerator,
-  ExactDivisionGenerator,
-  RemainderDivisionGenerator,
-  type ArithmeticSetting,
-} from "./arithmetic";
+import { ArithmeticGenerator, type ArithmeticSetting } from "./arithmetic";
 import {
   ExpansionGenerator,
   FactoringGenerator,
@@ -17,63 +12,23 @@ import { FractionGenerator } from "./fraction";
 import type { RandomSource } from "./generator";
 import { Operator } from "./operator";
 import type { Problem, ProblemType, ProblemTypeSummary } from "./types";
+import {
+  grade1ProblemTypes,
+  legacyGrade1ProblemTypes,
+} from "./catalog/elementary/grade1";
+import {
+  grade2ProblemTypes,
+  legacyGrade2ProblemTypes,
+} from "./catalog/elementary/grade2";
+import { grade3ProblemTypes } from "./catalog/elementary/grade3";
+import { grade4ProblemTypes } from "./catalog/elementary/grade4";
+import { grade5AdditionalProblemTypes } from "./catalog/elementary/grade5";
+import { grade6AdditionalProblemTypes } from "./catalog/elementary/grade6";
+import { entranceExamProblemTypes } from "./catalog/elementary/entrance-exam";
+import { juniorHighAdditionalProblemTypes } from "./catalog/junior-high";
+import { highSchoolAdditionalProblemTypes } from "./catalog/high-school";
 
 const random: RandomSource = Math.random;
-
-const grade1AddSubtract: ArithmeticSetting = {
-  min: 1,
-  max: 9,
-  minTerms: 2,
-  maxTerms: 2,
-  operators: [Operator.ADD, Operator.SUBTRACT],
-  allowNegative: false,
-  maxAnswer: 18,
-};
-
-const grade2AddSubtract: ArithmeticSetting = {
-  min: 10,
-  max: 99,
-  minTerms: 2,
-  maxTerms: 2,
-  operators: [Operator.ADD, Operator.SUBTRACT],
-  allowNegative: false,
-  maxAnswer: 200,
-};
-
-const grade2MultiplicationTable: ArithmeticSetting = {
-  min: 1,
-  max: 9,
-  minTerms: 2,
-  maxTerms: 2,
-  operators: [Operator.MULTIPLY],
-  allowNegative: false,
-  maxAnswer: 81,
-};
-
-const grade3Multiplication: ArithmeticSetting = {
-  min: 1,
-  max: 20,
-  minTerms: 2,
-  maxTerms: 2,
-  operators: [Operator.MULTIPLY],
-  allowNegative: false,
-  maxAnswer: 400,
-};
-
-const grade4Mixed: ArithmeticSetting = {
-  min: 1,
-  max: 20,
-  minTerms: 3,
-  maxTerms: 4,
-  operators: [
-    Operator.ADD,
-    Operator.SUBTRACT,
-    Operator.MULTIPLY,
-    Operator.DIVIDE,
-  ],
-  allowNegative: false,
-  maxAnswer: 1_000,
-};
 
 const grade5Mixed: ArithmeticSetting = {
   min: 1,
@@ -116,62 +71,10 @@ const juniorHigh1SignedNumbers: ArithmeticSetting = {
 };
 
 const problemTypes: readonly ProblemType[] = [
-  createProblemType(
-    "e1-add-sub",
-    "小学校",
-    "小1",
-    "たし算・ひき算（1桁）",
-    new ArithmeticGenerator(random, grade1AddSubtract),
-  ),
-  createProblemType(
-    "e2-add-sub-carry",
-    "小学校",
-    "小2",
-    "たし算・ひき算（2桁）",
-    new ArithmeticGenerator(random, grade2AddSubtract),
-  ),
-  createProblemType(
-    "e2-multiplication-table",
-    "小学校",
-    "小2",
-    "かけ算九九",
-    new ArithmeticGenerator(random, grade2MultiplicationTable),
-  ),
-  createProblemType(
-    "e3-multiplication",
-    "小学校",
-    "小3",
-    "かけ算",
-    new ArithmeticGenerator(random, grade3Multiplication),
-  ),
-  createProblemType(
-    "e3-exact-division",
-    "小学校",
-    "小3",
-    "わり算（九九の逆）",
-    new ExactDivisionGenerator(random, 9, 9),
-  ),
-  createProblemType(
-    "e3-remainder-division",
-    "小学校",
-    "小3",
-    "あまりのあるわり算",
-    new RemainderDivisionGenerator(random, 9, 9),
-  ),
-  createProblemType(
-    "e4-mixed",
-    "小学校",
-    "小4",
-    "四則混合（かっこあり）",
-    new ArithmeticGenerator(random, grade4Mixed),
-  ),
-  createProblemType(
-    "e4-fraction-same-denominator",
-    "小学校",
-    "小4",
-    "同分母の分数の加減",
-    new FractionGenerator(random, 10, [Operator.ADD, Operator.SUBTRACT], true),
-  ),
+  ...grade1ProblemTypes,
+  ...grade2ProblemTypes,
+  ...grade3ProblemTypes,
+  ...grade4ProblemTypes,
   createProblemType(
     "e5-mixed-advanced",
     "小学校",
@@ -186,6 +89,7 @@ const problemTypes: readonly ProblemType[] = [
     "異分母の分数の加減",
     new FractionGenerator(random, 12, [Operator.ADD, Operator.SUBTRACT], false),
   ),
+  ...grade5AdditionalProblemTypes,
   createProblemType(
     "e6-mixed-final",
     "小学校",
@@ -205,6 +109,8 @@ const problemTypes: readonly ProblemType[] = [
       false,
     ),
   ),
+  ...grade6AdditionalProblemTypes,
+  ...entranceExamProblemTypes,
   createProblemType(
     "j1-signed-numbers",
     "中学校",
@@ -261,6 +167,7 @@ const problemTypes: readonly ProblemType[] = [
     "平方根の計算",
     new SquareRootGenerator(random, 9),
   ),
+  ...juniorHighAdditionalProblemTypes,
   createProblemType(
     "h1-factoring-advanced",
     "高校",
@@ -275,6 +182,13 @@ const problemTypes: readonly ProblemType[] = [
     "二次方程式（発展）",
     new QuadraticEquationGenerator(random, 15),
   ),
+  ...highSchoolAdditionalProblemTypes,
+];
+
+const allProblemTypes: readonly ProblemType[] = [
+  ...problemTypes,
+  ...legacyGrade1ProblemTypes,
+  ...legacyGrade2ProblemTypes,
 ];
 
 export function getProblemTypes(level?: string): ProblemTypeSummary[] {
@@ -284,7 +198,7 @@ export function getProblemTypes(level?: string): ProblemTypeSummary[] {
 }
 
 export function getProblemTypeById(id: string): ProblemTypeSummary | undefined {
-  const type = problemTypes.find((candidate) => candidate.id === id);
+  const type = allProblemTypes.find((candidate) => candidate.id === id);
   return type === undefined ? undefined : toSummary(type);
 }
 
@@ -293,11 +207,17 @@ export function generateProblems(typeId: string, count: number): Problem[] {
     throw new Error("問題数は1〜200の整数で指定してください");
   }
 
-  const type = problemTypes.find((candidate) => candidate.id === typeId);
+  const type = allProblemTypes.find((candidate) => candidate.id === typeId);
   if (type === undefined) {
     throw new Error(`そのような問題タイプはありません: ${typeId}`);
   }
-  return type.generator.generate(count);
+  const problems = type.generator.generate(count);
+  return isLowerElementary(type)
+    ? problems.map((problem) => ({
+        ...problem,
+        question: toFriendlyElementaryText(problem.question),
+      }))
+    : problems;
 }
 
 function createProblemType(
@@ -307,7 +227,15 @@ function createProblemType(
   title: string,
   generator: ProblemType["generator"],
 ): ProblemType {
-  return { id, level, grade, title, generator };
+  return {
+    id,
+    level,
+    grade,
+    title,
+    description: `${grade}で学ぶ「${title}」の問題をランダムに生成します。`,
+    recommendedQuestionsPerPage: 10,
+    generator,
+  };
 }
 
 function toSummary(type: ProblemType): ProblemTypeSummary {
@@ -316,5 +244,79 @@ function toSummary(type: ProblemType): ProblemTypeSummary {
     level: type.level,
     grade: type.grade,
     title: type.title,
+    description: type.description,
+    recommendedQuestionsPerPage: getRecommendedQuestionsPerPage(type),
   };
+}
+
+const compactWorksheetIds = new Set([
+  "e1-time-reading",
+  "e2-shapes",
+  "e2-bar-graph",
+  "e3-circle",
+  "e3-bar-graph",
+  "e4-angles",
+  "e4-area",
+  "e4-line-graph",
+  "e4-cuboid",
+  "e5-circumference",
+  "e6-circle-area",
+  "e6-symmetry",
+  "e6-proportion-graph",
+  "exam-sum-difference",
+  "exam-planting-trees",
+  "exam-age",
+  "exam-clock",
+]);
+
+function getRecommendedQuestionsPerPage(type: ProblemType): number {
+  return compactWorksheetIds.has(type.id) ? 6 : 10;
+}
+
+function isLowerElementary(type: ProblemType): boolean {
+  return type.level === "小学校" && /^小[1-4]$/.test(type.grade);
+}
+
+const elementaryReplacements: readonly [string, string][] = [
+  ["何時何分", "なんじなんぷん"],
+  ["何時間", "なんじかん"],
+  ["求めましょう", "もとめましょう"],
+  ["答えましょう", "こたえましょう"],
+  ["読み取り", "よみとり"],
+  ["長方形", "ちょうほうけい"],
+  ["正方形", "せいほうけい"],
+  ["直方体", "ちょくほうたい"],
+  ["三角形", "さんかくけい"],
+  ["四角形", "しかくけい"],
+  ["折れ線", "おれせん"],
+  ["棒グラフ", "ぼうグラフ"],
+  ["面積", "めんせき"],
+  ["体積", "たいせき"],
+  ["大きさ", "おおきさ"],
+  ["名前", "なまえ"],
+  ["時計", "とけい"],
+  ["時間", "じかん"],
+  ["時刻", "じこく"],
+  ["長さ", "ながさ"],
+  ["重さ", "おもさ"],
+  ["全部", "ぜんぶ"],
+  ["同じ", "おなじ"],
+  ["何分", "なんぷん"],
+  ["何本", "なんぼん"],
+  ["何個", "なんこ"],
+  ["何", "なん"],
+  ["図", "ず"],
+  ["円", "えん"],
+  ["角", "かく"],
+  ["辺", "へん"],
+  ["数", "かず"],
+  ["和", "わ"],
+  ["差", "さ"],
+];
+
+function toFriendlyElementaryText(text: string): string {
+  return elementaryReplacements.reduce(
+    (result, [kanji, reading]) => result.replaceAll(kanji, reading),
+    text,
+  );
 }

@@ -41,6 +41,78 @@ export function trackWorksheetGenerated() {
   window.gtag?.("event", "worksheet_generated");
 }
 
+type ProblemTypeSelectedParams = {
+  typeId: string;
+  title: string;
+  level: string;
+  grade: string;
+};
+
+export function trackProblemTypeSelected(params: ProblemTypeSelectedParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "problem_type_selected", {
+    type_id: params.typeId,
+    title: params.title,
+    level: params.level,
+    grade: params.grade,
+  });
+}
+
+type OptionsSubmittedParams = {
+  typeId: string;
+  pageCount: number;
+  questionsPerPage: number;
+  includeAnswers: boolean;
+};
+
+export function trackOptionsSubmitted(params: OptionsSubmittedParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "options_submitted", {
+    type_id: params.typeId,
+    page_count: params.pageCount,
+    questions_per_page: params.questionsPerPage,
+    include_answers: params.includeAnswers,
+  });
+}
+
+type GenerationErrorParams = {
+  typeId: string;
+  message: string;
+};
+
+export function trackGenerationError(params: GenerationErrorParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "generation_error", {
+    type_id: params.typeId,
+    message: params.message,
+  });
+}
+
+type ErrorPageShownParams = {
+  reason: string;
+  path: string;
+};
+
+export function trackErrorPageShown(params: ErrorPageShownParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "error_page_shown", {
+    reason: params.reason,
+    path: params.path,
+  });
+}
+
 type PrintEventParams = {
   typeId: string;
   pageCount: number;

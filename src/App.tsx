@@ -3,11 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
 // Page
-import  HomePage  from "./pages/HomePage";
+import HomePage from "./pages/HomePage";
 import GradeSelectionPage from "./pages/GradeSelectionPage";
 import ContentSelectionPage from "./pages/ContentSelectionPage";
 import OptionsPage from "./pages/OptionsPage";
 import PreviewPage from "./pages/PreviewPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -18,8 +19,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/grade-select" element={<GradeSelectionPage />} />
         <Route path="/content-select" element={<ContentSelectionPage />} />
+        <Route path="/problems/:typeId" element={<OptionsPage />} />
         <Route path="/options" element={<OptionsPage />} />
-        <Route path="/preview" element={<PreviewPage />} /> 
+        <Route path="/preview" element={<PreviewPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

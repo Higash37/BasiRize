@@ -12,7 +12,7 @@ function HomePage() {
   return (
     <>
       <div className="page-intro">
-        <h1>教科を選んでください</h1>
+        <h2>教科を選んでください</h2>
         <p>条件を選ぶだけでプリントを作成・印刷</p>
       </div>
       <div className="subject-grid">

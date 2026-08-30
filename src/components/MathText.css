@@ -1,0 +1,22 @@
+.math-fraction {
+  display: inline-grid;
+  grid-template-rows: auto auto;
+  margin: 0 0.12em;
+  line-height: 1.05;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.math-fraction > span:first-child {
+  padding: 0 0.16em 0.08em;
+  border-bottom: 0.06em solid currentcolor;
+}
+
+.math-fraction > span:last-child {
+  padding: 0.08em 0.16em 0;
+}
+
+.sheet-problem-content sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
