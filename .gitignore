@@ -26,3 +26,6 @@ backend/.gradle/
 backend/build/
 backend/app/build/
 backend/memo.md
+
+# Playwright MCPのブラウザ操作ログ（動作確認の作業ファイル）
+.playwright-mcp/

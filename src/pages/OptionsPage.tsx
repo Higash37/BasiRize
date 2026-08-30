@@ -8,6 +8,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 // 自作
 import { getProblemTypeById } from "../problem-generation";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import { enFlagshipTypes } from "../data/enFlagshipTypes";
 import { trackOptionsSubmitted } from "../analytics";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
@@ -32,12 +33,35 @@ function OptionsPage() {
   const problemType = typeId ? getProblemTypeById(typeId) : undefined;
   const questionsPerPage = problemType?.recommendedQuestionsPerPage ?? 10;
 
+  const enFlagship = problemType
+    ? enFlagshipTypes.find((type) => type.typeId === problemType.id)
+    : undefined;
+
   useDocumentMetadata(
     problemType
       ? {
-          title: `${problemType.title}の無料問題プリント | BasiRize`,
+          // 学年をタイトルタグの先頭に含める。表示上のh1やカードの見出しは
+          // problemType.titleのままで変えず、検索結果に出るtitleタグだけを
+          // 学年つきにして区別する（同じ単元名を複数学年で使う場合の重複防止）
+          title: `${problemType.grade}・${problemType.title}の無料問題プリント | BasiRize`,
           description: problemType.description,
           canonicalPath: `/problems/${problemType.id}`,
+          alternates: enFlagship
+            ? [
+                {
+                  hreflang: "en",
+                  path: `/en/worksheets/${enFlagship.slug}`,
+                },
+              ]
+            : undefined,
+          breadcrumbs: [
+            { name: "数学", path: "/" },
+            {
+              name: problemType.level,
+              path: `/content-select?level=${problemType.level}`,
+            },
+            { name: problemType.title, path: `/problems/${problemType.id}` },
+          ],
         }
       : undefined,
   );
@@ -75,7 +99,7 @@ function OptionsPage() {
         />
 
         <div className="page-intro">
-          <h2>{problemType.title}の設定</h2>
+          <h1>{problemType.title}の設定</h1>
         </div>
       </div>
 

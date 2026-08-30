@@ -55,7 +55,7 @@ function FlowStepper({ current, level, problemType }: FlowStepperProps) {
       key: "options",
       icon: <FaSlidersH aria-hidden="true" />,
       label: "設定",
-      href: problemType ? `/options?typeId=${problemType.id}` : undefined,
+      href: problemType ? `/problems/${problemType.id}` : undefined,
       state:
         current === "options" ? "current" : current === "preview" ? "done" : "upcoming",
     },
