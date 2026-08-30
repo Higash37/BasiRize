@@ -1,5 +1,8 @@
 const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
+// ブラウザの`window`にGA4用の機能が存在することをTypeScriptに教示
+// 通常はwindow.documentやwindow.locationなどしかないが、dataLayerやgtagを追加する
+// declare global で既存のブラウザのWindow型へ情報を追加
 declare global {
   interface Window {
     dataLayer: IArguments[];
@@ -22,8 +25,7 @@ export function initializeAnalytics() {
 
   const script = document.createElement("script");
   script.async = true;
-  script.src =
-    `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MEASUREMENT_ID)}`;
 
   document.head.appendChild(script);
 
