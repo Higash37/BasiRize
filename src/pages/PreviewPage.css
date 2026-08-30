@@ -7,6 +7,10 @@
   margin-bottom: var(--space-6);
 }
 
+.sticky-page-header .preview-toolbar {
+  margin-bottom: 0;
+}
+
 .preview-print {
   font: inherit;
   font-weight: 700;
@@ -18,7 +22,9 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-1);
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .preview-print:hover {
@@ -40,7 +46,7 @@
   overflow-x: auto;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .sheet-frame {
     width: calc(100vw - (var(--space-2) * 2));
     aspect-ratio: 210 / 297;
@@ -48,8 +54,9 @@
 }
 
 .sheet {
+  position: relative;
   width: 210mm;
-  min-height: 297mm;
+  height: 297mm;
   margin: 0 auto var(--space-6);
   padding: 20mm 16mm;
   background: var(--color-surface);
@@ -57,12 +64,37 @@
   border-radius: var(--radius-sm);
 }
 
+.sheet-overflowing {
+  outline: 3px solid var(--color-danger);
+  outline-offset: -3px;
+}
+
+.sheet-overflowing::after {
+  content: "この問題数では用紙に収まりません。1枚あたりの問題数を減らしてください。";
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  left: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-danger);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+}
+
 /* スマホは transform で見た目だけ縮小し、印刷の実寸(210mm)は変えない */
-@media screen and (max-width: 600px){
-  .sheet{
+@media screen and (max-width: 600px) {
+  .sheet {
     /* scaleをA4の幅でwidth内に収めるために実装 */
-  transform: scale(calc((100vw - (var(--space-2) * 2))  / 210mm));
-  transform-origin: top left;
+    transform: scale(calc((100vw - (var(--space-2) * 2)) / 210mm));
+    transform-origin: top left;
+  }
+
+  .sheet-overflowing::after {
+    display: none;
   }
 }
 
@@ -108,25 +140,34 @@
 .sheet-problems {
   margin: 0;
   padding-left: 1.5em;
-  font-size: 30px;
-  line-height: 2.6;
+  font-size: var(--problem-font-size, 30px);
+  line-height: var(--problem-line-height, 2.6);
   /* <ol>が作る番号を消して①というような表示にする */
   list-style: none;
   /* カウンターを作り、初期値へ戻すプロパティ。今回は問題番号を振るために実装 */
   counter-reset: problem-number;
-  column-count: 2;
+  column-count: var(--problem-columns, 2);
   column-gap: 16mm;
-}
-
-.sheet-problems-small {
-  font-size: 22px;
 }
 
 /* 1問が段や紙をまたいで分断されないようにする */
 .sheet-problems li {
+  margin-bottom: 1.1em;
   break-inside: avoid;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
   /* 指定したカウンターを増やすプロパティ。liタグの要素ごとに1つ増える */
   counter-increment: problem-number;
+}
+
+.sheet-problems-with-diagrams li {
+  margin-bottom: 0.5em;
+}
+
+.sheet-problem-content {
+  display: inline-block;
+  max-width: calc(100% - 2em);
+  vertical-align: top;
 }
 
 /* ::beforeによる擬似要素content: counter(名前)でliタグ先頭に問題番号をつける */
@@ -161,12 +202,14 @@
 
   .sheet {
     width: auto;
+    height: auto;
     max-width: none;
     min-height: auto;
     margin: 0;
     padding: 0;
     border: none;
     border-radius: 0;
+    outline: none;
   }
 
   /* 2枚目以降は必ず新しい紙から始める */

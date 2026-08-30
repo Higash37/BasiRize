@@ -3,4 +3,9 @@ export {
   getProblemTypeById,
   getProblemTypes,
 } from "./registry";
-export type { Level, Problem, ProblemTypeSummary } from "./types";
+export type {
+  Level,
+  Problem,
+  ProblemDiagram,
+  ProblemTypeSummary,
+} from "./types";

@@ -25,8 +25,12 @@ export abstract class ProblemGenerator implements ProblemGeneratorType {
       attempt += 1
     ) {
       const problem = this.generateProblem();
-      if (!seen.has(problem.question)) {
-        seen.add(problem.question);
+      const problemKey = JSON.stringify({
+        question: problem.question,
+        diagram: problem.diagram,
+      });
+      if (!seen.has(problemKey)) {
+        seen.add(problemKey);
         problems.push(problem);
       }
     }

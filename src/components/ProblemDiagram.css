@@ -1,0 +1,209 @@
+.problem-diagram {
+  display: block;
+  width: 30mm;
+  max-width: 100%;
+  margin: var(--space-2) auto;
+  color: var(--color-text);
+}
+
+.sheet-problems-with-diagrams .problem-diagram {
+  width: auto;
+  height: var(--problem-diagram-height);
+  max-height: var(--problem-diagram-height);
+  max-width: 100%;
+}
+
+.problem-clock-face {
+  fill: var(--color-surface);
+  stroke: currentcolor;
+  stroke-width: 2;
+}
+
+.problem-clock-tick,
+.problem-clock-hour,
+.problem-clock-minute {
+  stroke: currentcolor;
+  stroke-linecap: round;
+}
+
+.problem-clock-tick {
+  stroke-width: 1.5;
+}
+
+.problem-clock-hour {
+  stroke-width: 4;
+}
+
+.problem-clock-minute {
+  stroke-width: 2.5;
+}
+
+.problem-clock-center {
+  fill: currentcolor;
+}
+
+.problem-clock text {
+  fill: currentcolor;
+  font-size: 10px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.problem-shape {
+  width: 34mm;
+}
+
+.problem-shape-polygon {
+  fill: none;
+  stroke: currentcolor;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.problem-bar-chart {
+  width: 65mm;
+}
+
+.problem-chart-axis,
+.problem-chart-grid {
+  stroke: currentcolor;
+}
+
+.problem-chart-axis {
+  stroke-width: 1.5;
+}
+
+.problem-chart-grid {
+  opacity: 0.2;
+  stroke-width: 0.5;
+}
+
+.problem-chart-bar {
+  fill: currentcolor;
+  opacity: 0.7;
+}
+
+.problem-chart-axis-label,
+.problem-chart-label {
+  fill: currentcolor;
+  font-size: 7px;
+  text-anchor: middle;
+}
+
+.problem-circle {
+  width: 40mm;
+}
+
+.problem-circle-line {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+}
+
+.problem-circle-radius {
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.problem-circle-center {
+  fill: currentcolor;
+}
+
+.problem-circle-label {
+  fill: currentcolor;
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+.problem-tape {
+  width: 68mm;
+}
+
+.problem-tape-bar {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.problem-tape-name,
+.problem-tape-note,
+.problem-point-label {
+  fill: currentcolor;
+  font-size: 8px;
+  text-anchor: middle;
+}
+
+.problem-point-line {
+  width: 62mm;
+}
+
+.problem-point-path {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.problem-point-dot {
+  fill: var(--color-surface);
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.problem-angle,
+.problem-rectangle {
+  width: 55mm;
+}
+
+.problem-angle-line,
+.problem-angle-arc,
+.problem-rectangle-shape {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+}
+
+.problem-angle-label,
+.problem-rectangle-label {
+  fill: currentcolor;
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+.problem-line-chart,
+.problem-cuboid,
+.problem-symmetry,
+.problem-proportion-graph {
+  width: 62mm;
+}
+
+.problem-line-chart-line,
+.problem-proportion-line {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+}
+
+.problem-line-chart-point,
+.problem-symmetry-center {
+  fill: currentcolor;
+}
+
+.problem-cuboid-line,
+.problem-symmetry-shape {
+  fill: none;
+  stroke: currentcolor;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.problem-cuboid-label {
+  fill: currentcolor;
+  font-size: 7px;
+  text-anchor: middle;
+}
+
+.problem-symmetry-axis {
+  stroke: currentcolor;
+  stroke-dasharray: 4 3;
+  stroke-width: 1;
+}

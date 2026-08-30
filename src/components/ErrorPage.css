@@ -1,0 +1,58 @@
+.error-page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.error-page-card {
+  max-width: 28rem;
+  width: 100%;
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-8) var(--space-6);
+}
+
+.error-page-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  color: var(--color-danger);
+  margin-bottom: var(--space-4);
+}
+
+.error-page-title {
+  font-size: var(--font-size-lg);
+  line-height: 1.4;
+  margin: 0 0 var(--space-2);
+}
+
+.error-page-message {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-6);
+}
+
+.error-page-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+.error-page-back:hover {
+  opacity: 0.85;
+}

@@ -1,0 +1,88 @@
+.flow-stepper {
+  width: 100%;
+  margin-bottom: var(--space-4);
+  transition: opacity var(--transition);
+}
+
+.flow-stepper-scrolled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.flow-stepper ol {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow-stepper-step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0; /* これがないと中の文字幅にstepが引っ張られ、5列均等・省略記号が効かない */
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+/* ステップ同士をつなぐ線。円の中心の高さに、次のステップの中心まで伸ばす */
+.flow-stepper-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-border);
+}
+
+.flow-stepper-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  background: var(--color-muted);
+  color: var(--color-text-muted);
+}
+
+.flow-stepper-label {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+a.flow-stepper-label:hover {
+  text-decoration: underline;
+}
+
+.flow-stepper-step-done .flow-stepper-icon {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.flow-stepper-step-done .flow-stepper-label {
+  color: var(--color-text);
+}
+
+.flow-stepper-step-current .flow-stepper-icon {
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.flow-stepper-step-current .flow-stepper-label {
+  font-weight: 700;
+  color: var(--color-text);
+}

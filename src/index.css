@@ -42,21 +42,22 @@ content-boxではなくpadding や borderも内側に含めたいのでborder-bo
   box-sizing: border-box;
 }
 
-:root { 
-   /* 文字サイズ（1.25倍ずつ） */
-  --font-size-base: 1rem;      /* 16px */
-  --font-size-lg: 1.25rem;     /* 20px */
-  --font-size-xl: 1.5rem;      /* 24px */
-  --font-size-2xl: 2rem;       /* 32px */
+:root {
+  /* 文字サイズ（1.25倍ずつ） */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.25rem; /* 20px */
+  --font-size-xl: 1.5rem; /* 24px */
+  --font-size-2xl: 2rem; /* 32px */
 
   /* 色 */
-  --color-bg: #ffffff;       /* ページ全体の地 */
-  --color-surface: #ffffff;  /* カードなどの面 */
-  --color-muted: #eef0f4;    /* 無効状態の塗り */
+  --color-bg: #ffffff; /* ページ全体の地 */
+  --color-surface: #ffffff; /* カードなどの面 */
+  --color-muted: #eef0f4; /* 無効状態の塗り */
   --color-border: #dcdfe5;
   --color-text: #1b1f26;
   --color-text-muted: #5c6470;
   --color-accent: #264af4;
+  --color-danger: #c92a2a;
 
   /*
     教科の色。
@@ -65,20 +66,21 @@ content-boxではなくpadding や borderも内側に含めたいのでborder-bo
     色は装飾であり、意味は教科名の文字が持つ。
   */
   --subject-japanese: #e03131; /* 国語 */
-  --subject-math: #1c7ed6;     /* 算数・数学 */
-  --subject-science: #2f9e44;  /* 理科 */
-  --subject-social: #f08c00;   /* 社会 */
-  --subject-english: #7048e8;  /* 英語 */
+  --subject-math: #1c7ed6; /* 算数・数学 */
+  --subject-science: #2f9e44; /* 理科 */
+  --subject-social: #f08c00; /* 社会 */
+  --subject-english: #7048e8; /* 英語 */
 
-  --subject-music: #c2255c;    /* 音楽 */
-  --subject-art: #e8590c;      /* 図画工作・美術 */
-  --subject-pe: #0c8599;       /* 体育・保健体育 */
-  --subject-tech: #74b816;     /* 技術・家庭 */
-  --subject-info: #495057;     /* 情報 */
+  --subject-music: #c2255c; /* 音楽 */
+  --subject-art: #e8590c; /* 図画工作・美術 */
+  --subject-pe: #0c8599; /* 体育・保健体育 */
+  --subject-tech: #74b816; /* 技術・家庭 */
+  --subject-info: #495057; /* 情報 */
 
-  --subject-ai: #4263eb;       /* AI作成（教科ではない特別枠） */
+  --subject-ai: #4263eb; /* AI作成（教科ではない特別枠） */
 
   /* 余白（4の倍数で揃える） */
+  --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
@@ -93,9 +95,10 @@ content-boxではなくpadding や borderも内側に含めたいのでborder-bo
   --transition: 0.15s;
 
   /* 影（浮き上がりの段階） */
-  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.08), 0 4px 12px rgba(16, 24, 40, 0.10);
-  --shadow-2: 0 2px 4px rgba(16, 24, 40, 0.10), 0 12px 24px rgba(16, 24, 40, 0.14);
-
+  --shadow-1:
+    0 1px 2px rgba(16, 24, 40, 0.08), 0 4px 12px rgba(16, 24, 40, 0.1);
+  --shadow-2:
+    0 2px 4px rgba(16, 24, 40, 0.1), 0 12px 24px rgba(16, 24, 40, 0.14);
 }
 
 body {
@@ -138,8 +141,8 @@ body {
   margin-bottom: var(--space-6);
 }
 
-.page-intro h1 {
-  font-size: var(--font-size-2xl);
+.page-intro h2 {
+  font-size: var(--font-size-lg);
   line-height: 1.4;
   margin: 0;
 }
@@ -147,4 +150,33 @@ body {
 .page-intro p {
   margin: var(--space-2) 0 0;
   color: var(--color-text-muted);
+}
+
+/* margin-topでsite-mainの上パディング分だけ持ち上げ、スクロール開始直後に
+   一瞬だけ一緒に動いて見える区間（sticky特有の「固定され始めるまでの遊び」）をなくす */
+.sticky-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin-top: calc(-1 * var(--space-2));
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.sticky-page-header .page-intro {
+  margin-bottom: 0;
+}
+
+/* 画面には出さず、スクリーンリーダーだけに伝えたい文言に使う */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

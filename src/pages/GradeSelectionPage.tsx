@@ -1,14 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import SubjectCard from "../components/SubjectCard";
 import { gradeCardImages } from "../data/cardImages.ts";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 
 function GradeSelectionPage() {
   const navigate = useNavigate();
 
+  useDocumentMetadata({
+    title: "学年を選んで算数・数学の問題プリントを作成 | BasiRize",
+    description:
+      "小学校・中学校・高校から学年区分を選び、条件に合った算数・数学の問題プリントをすぐに作成できます。",
+    canonicalPath: "/grade-select",
+  });
+
   return (
     <>
       <div className="page-intro">
-        <h1>学年区分を選択</h1>
+        <h2>学年区分を選択</h2>
       </div>
 
       <div className="subject-grid">

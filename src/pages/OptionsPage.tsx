@@ -3,10 +3,14 @@ import { useState } from "react";
 // Link: <Link to="...">と書く。押すと画面を再読み込みせずに移動する（HTMLの<link>とは別物）
 // useNavigate: 別ページに移動する関数をもらう
 // useSearchParams: URLの?以降を読むフック
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 // 自作
 import { getProblemTypeById } from "../problem-generation";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import { trackOptionsSubmitted } from "../analytics";
+import ErrorPage from "../components/ErrorPage";
+import FlowStepper from "../components/FlowStepper";
 // CSSスタイル
 import "./OptionsPage.css";
 
@@ -17,50 +21,62 @@ function OptionsPage() {
   // useSearchParams() は2つ入った配列を返すので、その1つ目だけを取り出してsearchParamsと名付ける
   // なぜ[searchParams]なのか?: []を左辺に書かないと配列まるごとが入ってしまい、getメソッドが使えないため
   const [searchParams] = useSearchParams();
+  const { typeId: pathTypeId } = useParams();
   // .get(...)はキーがtypeIdの値を返す。無ければ null
   // /options?typeId=e1-add-subであれば、typeIdがキー・e1-add-subが値
-  const typeId = searchParams.get("typeId");
+  const typeId = pathTypeId ?? searchParams.get("typeId");
   // useState(初期値) が [今の値, 変える関数] を返す。それを2つに分けて受け取る
   const [pageCount, setPageCount] = useState(1);
-  // 問題数のデフォルトを設定
-  const [questionsPerPage, setQuestionsPerPage] = useState(10);
   // 解答を用意するかどうかデフォルトを設定
   const [includeAnswers, setIncludeAnswers] = useState(true);
   const problemType = typeId ? getProblemTypeById(typeId) : undefined;
+  const questionsPerPage = problemType?.recommendedQuestionsPerPage ?? 10;
+
+  useDocumentMetadata(
+    problemType
+      ? {
+          title: `${problemType.title}の無料問題プリント | BasiRize`,
+          description: problemType.description,
+          canonicalPath: `/problems/${problemType.id}`,
+        }
+      : undefined,
+  );
 
   // 早期リターン（ガード節）
   // typeIdがなければ/grade-selectへ戻らせる
   if (!typeId) {
     return (
-      <div className="page-intro">
-        <h1>内容が指定されていません</h1>
-        <p>
-          <Link to="/grade-select">学年区分を選び直す</Link>
-        </p>
-      </div>
+      <ErrorPage
+        reason="missing-type"
+        title="内容が指定されていません"
+        message="学年区分を選び直してください。"
+      />
     );
   }
 
   if (!problemType) {
     return (
-      <div className="page-intro">
-        <h1>内容を取得できませんでした</h1>
-        <p>URLが古いか、問題タイプが削除された可能性があります。</p>
-        <p>
-          <Link to="/grade-select">学年区分を選び直す</Link>
-        </p>
-      </div>
+      <ErrorPage
+        reason="type-not-found"
+        title="内容を取得できませんでした"
+        message="URLが古いか、問題タイプが削除された可能性があります。"
+      />
     );
   }
 
   return (
     // <>: フラグメント。関数が返せる値は1つだけなので、フラグメントで包む
     <>
-      <div className="page-intro">
-        <h1>プリントの内容を決定</h1>
-        <p>
-          {problemType.level}／{problemType.grade}／{problemType.title}
-        </p>
+      <div className="sticky-page-header">
+        <FlowStepper
+          level={problemType.level}
+          current="options"
+          problemType={{ id: problemType.id, title: problemType.title }}
+        />
+
+        <div className="page-intro">
+          <h2>{problemType.title}の設定</h2>
+        </div>
       </div>
 
       <form
@@ -68,6 +84,12 @@ function OptionsPage() {
         onSubmit={(event) => {
           // ブラウザの再読み込み規定動作を消す
           event.preventDefault();
+          trackOptionsSubmitted({
+            typeId: problemType.id,
+            pageCount,
+            questionsPerPage,
+            includeAnswers,
+          });
           // 自分でページへ飛ぶ
           navigate(
             `/preview?typeId=${problemType.id}&pages=${pageCount}&perPage=${questionsPerPage}&answers=${includeAnswers}`,
@@ -85,18 +107,10 @@ function OptionsPage() {
           />
         </label>
 
-        <label className="options-field">
-          1枚あたりの問題数
-          <input
-            type="number"
-            min={1}
-            max={50}
-            value={questionsPerPage}
-            onChange={(event) =>
-              setQuestionsPerPage(Number(event.target.value))
-            }
-          />
-        </label>
+        <p className="options-summary">
+          1ページにつき{questionsPerPage}問、合計
+          {pageCount * questionsPerPage}問を作成します。
+        </p>
 
         <label className="options-check">
           <input

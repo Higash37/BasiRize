@@ -23,6 +23,14 @@
   border-radius: var(--radius-sm);
 }
 
+.options-summary {
+  margin: 0;
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+  background: var(--color-muted);
+  border-radius: var(--radius-sm);
+}
+
 /* チェックボックスは横並び。押せる高さを44px確保する */
 .options-check {
   display: flex;
@@ -49,7 +57,9 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-1);
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .options-submit:hover {

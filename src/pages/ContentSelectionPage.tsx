@@ -1,56 +1,89 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import SubjectCard from "../components/SubjectCard";
-import { getProblemTypes } from "../problem-generation";
+import { useSearchParams } from "react-router-dom";
+import ProblemTypeCard from "../components/ProblemTypeCard";
+import ErrorPage from "../components/ErrorPage";
+import FlowStepper from "../components/FlowStepper";
+import {
+  getProblemTypes,
+  type Level,
+  type ProblemTypeSummary,
+} from "../problem-generation";
+import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import "./ContentSelectionPage.css";
 
 function ContentSelectionPage() {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const level = searchParams.get("level");
   const types = level ? getProblemTypes(level) : [];
 
+  useDocumentMetadata(
+    level && types.length > 0
+      ? {
+          title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
+          description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
+          canonicalPath: `/content-select?level=${level}`,
+        }
+      : undefined,
+  );
+
   if (!level) {
     return (
-      <div className="page-intro">
-        <h1>学年区分が指定されていません</h1>
-        <p>
-          <Link to="/grade-select">学年区分を選び直す</Link>
-        </p>
-      </div>
+      <ErrorPage
+        reason="missing-level"
+        title="学年区分が指定されていません"
+        message="学年区分を選び直してください。"
+      />
     );
   }
 
   if (types.length === 0) {
     return (
-      <div className="page-intro">
-        <h1>該当する内容がありません</h1>
-        <p>「{level}」に対応する問題がまだ用意されていません。</p>
-        <p>
-          <Link to="/grade-select">学年区分を選び直す</Link>
-        </p>
-      </div>
+      <ErrorPage
+        reason="no-types-for-level"
+        title="該当する内容がありません"
+        message={`「${level}」に対応する問題がまだ用意されていません。`}
+      />
     );
   }
 
+  const groups = groupByGrade(types);
+
   return (
     <>
-      <div className="page-intro">
-        <h1>内容を選んでください</h1>
-        <p>
-          {level}／{types.length}種類
-        </p>
+      <div className="sticky-page-header">
+        <FlowStepper level={level as Level} current="level" />
+        <h2 className="visually-hidden">
+          内容を選んでください（{level}／{types.length}種類）
+        </h2>
       </div>
 
-      <div className="subject-grid">
-        {types.map((type) => (
-          <SubjectCard
-            key={type.id}
-            title={`${type.grade}：${type.title}`}
-            onClick={() => navigate(`/options?typeId=${type.id}`)}
-          />
+      <div className="problem-type-groups">
+        {groups.map(([grade, gradeTypes]) => (
+          <section key={grade} className="problem-type-group">
+            <h3>{grade}</h3>
+            <div className="problem-type-grid">
+              {gradeTypes.map((type) => (
+                <ProblemTypeCard key={type.id} problemType={type} />
+              ))}
+            </div>
+          </section>
         ))}
       </div>
     </>
   );
+}
+
+function groupByGrade(
+  types: ProblemTypeSummary[],
+): [string, ProblemTypeSummary[]][] {
+  const groups = new Map<string, ProblemTypeSummary[]>();
+
+  for (const type of types) {
+    const gradeTypes = groups.get(type.grade) ?? [];
+    gradeTypes.push(type);
+    groups.set(type.grade, gradeTypes);
+  }
+
+  return [...groups.entries()];
 }
 
 export default ContentSelectionPage;
