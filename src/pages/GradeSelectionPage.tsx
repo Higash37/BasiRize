@@ -16,7 +16,7 @@ function GradeSelectionPage() {
   return (
     <>
       <div className="page-intro">
-        <h2>学年区分を選択</h2>
+        <h1>学年区分を選択</h1>
       </div>
 
       <div className="subject-grid">

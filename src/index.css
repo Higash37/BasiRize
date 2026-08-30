@@ -141,7 +141,7 @@ body {
   margin-bottom: var(--space-6);
 }
 
-.page-intro h2 {
+.page-intro h1 {
   font-size: var(--font-size-lg);
   line-height: 1.4;
   margin: 0;

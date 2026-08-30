@@ -8,6 +8,8 @@ import GradeSelectionPage from "./pages/GradeSelectionPage";
 import ContentSelectionPage from "./pages/ContentSelectionPage";
 import OptionsPage from "./pages/OptionsPage";
 import PreviewPage from "./pages/PreviewPage";
+import EnHomePage from "./pages/EnHomePage";
+import EnWorksheetPage from "./pages/EnWorksheetPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/problems/:typeId" element={<OptionsPage />} />
         <Route path="/options" element={<OptionsPage />} />
         <Route path="/preview" element={<PreviewPage />} />
+        <Route path="/en" element={<EnHomePage />} />
+        <Route path="/en/worksheets/:slug" element={<EnWorksheetPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

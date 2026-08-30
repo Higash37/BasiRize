@@ -44,7 +44,7 @@ function ErrorPage({
             />
           </svg>
         </span>
-        <h2 className="error-page-title">{title}</h2>
+        <h1 className="error-page-title">{title}</h1>
         <p className="error-page-message">{message}</p>
         <Link to={backTo} className="error-page-back">
           {backLabel}

@@ -31,10 +31,14 @@ Sentry.init({
 
 // createRoot() はreact-dom/clientパッケージからインポートしないといけない
 // documentはブラウザ本体（DOM API）が持っているのでインポート不要
+//
+// prerenderでdist/内のHTMLに中身を書き込んでいるが、react-router-dom側の
+// 仕様(data-discover属性など)と噛み合わずhydrateRootだとエラーになるため、
+// ここは通常通りcreateRootで描画し直す。SEO向けの静的HTML自体には影響しない
 createRoot(document.getElementById("root")!).render(
-<StrictMode>  
-  <BrowserRouter>
-  <App />
-  </BrowserRouter>
-  </StrictMode>
-  );
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+);

@@ -135,7 +135,7 @@ function PreviewPage() {
         />
 
         <div className="page-intro">
-          <h2>できあがりを確認してください</h2>
+          <h1>できあがりを確認してください</h1>
           <p>
             {problemType.grade}／{problemType.title}／{pages.length}枚
             {includeAnswers && "（解答つき）"}

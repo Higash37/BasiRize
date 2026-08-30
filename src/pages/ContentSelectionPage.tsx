@@ -21,6 +21,10 @@ function ContentSelectionPage() {
           title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
           description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
           canonicalPath: `/content-select?level=${level}`,
+          breadcrumbs: [
+            { name: "数学", path: "/" },
+            { name: level, path: `/content-select?level=${level}` },
+          ],
         }
       : undefined,
   );
@@ -51,9 +55,9 @@ function ContentSelectionPage() {
     <>
       <div className="sticky-page-header">
         <FlowStepper level={level as Level} current="level" />
-        <h2 className="visually-hidden">
+        <h1 className="visually-hidden">
           内容を選んでください（{level}／{types.length}種類）
-        </h2>
+        </h1>
       </div>
 
       <div className="problem-type-groups">
