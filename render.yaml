@@ -4,6 +4,9 @@ services:
     name: BasiRize
     buildCommand: npm install; npm run build
     staticPublishPath: ./dist
+    # 今までダッシュボード側で手動デプロイにしていたため、Blueprint同期で
+    # 自動デプロイに切り替わらないよう明示しておく
+    autoDeploy: false
     headers:
       # MIMEタイプの拡大解釈によるスクリプト実行を防ぐ
       - path: /*
