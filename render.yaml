@@ -1,0 +1,27 @@
+services:
+  - type: web
+    runtime: static
+    name: BasiRize
+    buildCommand: npm install; npm run build
+    staticPublishPath: ./dist
+    headers:
+      # MIMEタイプの拡大解釈によるスクリプト実行を防ぐ
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      # 他サイトのiframeにこのページを埋め込ませない（クリックジャッキング対策）
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      # 遷移先には送信元URLの一部までしか渡さない
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      # カメラ・マイク・位置情報など、そもそも使わない機能をブラウザ側で明示的に無効化
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      # HTTPでのアクセスも今後1年間は自動的にHTTPSへ切り替えるようブラウザに指示
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
