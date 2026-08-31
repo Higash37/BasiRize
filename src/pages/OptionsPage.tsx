@@ -15,6 +15,9 @@ import FlowStepper from "../components/FlowStepper";
 // CSSスタイル
 import "./OptionsPage.css";
 
+// ページ数の上限。これを超えたら送信できず、警告表示に切り替える
+const MAX_PAGE_COUNT = 20;
+
 function OptionsPage() {
   const navigate = useNavigate();
   // []から取り出す書き方
@@ -26,8 +29,17 @@ function OptionsPage() {
   // .get(...)はキーがtypeIdの値を返す。無ければ null
   // /options?typeId=e1-add-subであれば、typeIdがキー・e1-add-subが値
   const typeId = pathTypeId ?? searchParams.get("typeId");
-  // useState(初期値) が [今の値, 変える関数] を返す。それを2つに分けて受け取る
-  const [pageCount, setPageCount] = useState(1);
+  // 入力欄には文字列として持たせる。数値のstateだと、全部消したときに
+  // 強制的に0が表示されてしまい、打ち直しづらいため
+  const [pageCountText, setPageCountText] = useState("1");
+  const parsedPageCount = Number(pageCountText);
+  const isValidPageCount =
+    Number.isInteger(parsedPageCount) && parsedPageCount > 0;
+  // 上限(20)を超えているかどうか。超えていたら送信できず、警告表示にする
+  const isPageCountOverLimit =
+    isValidPageCount && parsedPageCount > MAX_PAGE_COUNT;
+  // 入力途中の空欄・不正な値のときは1として扱う（計算・送信に使うのはこちら）
+  const pageCount = isValidPageCount ? parsedPageCount : 1;
   // 解答を用意するかどうかデフォルトを設定
   const [includeAnswers, setIncludeAnswers] = useState(true);
   const problemType = typeId ? getProblemTypeById(typeId) : undefined;
@@ -97,10 +109,10 @@ function OptionsPage() {
           current="options"
           problemType={{ id: problemType.id, title: problemType.title }}
         />
+      </div>
 
-        <div className="page-intro">
-          <h1>{problemType.title}の設定</h1>
-        </div>
+      <div className="page-intro">
+        <h1>{problemType.title}の設定</h1>
       </div>
 
       <form
@@ -108,6 +120,9 @@ function OptionsPage() {
         onSubmit={(event) => {
           // ブラウザの再読み込み規定動作を消す
           event.preventDefault();
+          if (isPageCountOverLimit) {
+            return;
+          }
           trackOptionsSubmitted({
             typeId: problemType.id,
             pageCount,
@@ -120,30 +135,77 @@ function OptionsPage() {
           );
         }}
       >
-        <label className="options-field">
-          ページ数
-          <input
-            type="number"
-            min={1}
-            max={10}
-            value={pageCount}
-            onChange={(event) => setPageCount(Number(event.target.value))}
-          />
-        </label>
+        <div className="options-field">
+          <label htmlFor="page-count-input">ページ数</label>
+          <div className="options-page-count">
+            <button
+              type="button"
+              className="options-page-count-btn"
+              onClick={() =>
+                setPageCountText(String(Math.max(1, pageCount - 1)))
+              }
+              aria-label="ページ数を減らす"
+            >
+              −
+            </button>
 
-        <p className="options-summary">
-          1ページにつき{questionsPerPage}問、合計
-          {pageCount * questionsPerPage}問を作成します。
-        </p>
+            <input
+              id="page-count-input"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              className={
+                isPageCountOverLimit
+                  ? "options-page-count-input options-page-count-input-error"
+                  : "options-page-count-input"
+              }
+              aria-invalid={isPageCountOverLimit}
+              value={pageCountText}
+              onChange={(event) => {
+                const raw = event.target.value;
+                // 数字だけ許可。空欄は打ち直し中として許可する（0にはしない）
+                if (raw === "" || /^\d+$/.test(raw)) {
+                  setPageCountText(raw);
+                }
+              }}
+              onBlur={() => {
+                if (!isValidPageCount) {
+                  setPageCountText("1");
+                }
+              }}
+            />
 
-        <label className="options-check">
+            <button
+              type="button"
+              className="options-page-count-btn"
+              onClick={() => setPageCountText(String(pageCount + 1))}
+              aria-label="ページ数を増やす"
+            >
+              ＋
+            </button>
+          </div>
+        </div>
+
+        {isPageCountOverLimit ? (
+          <p className="options-summary options-summary-error" role="alert">
+            {MAX_PAGE_COUNT}枚までです。
+          </p>
+        ) : (
+          <p className="options-summary">
+            1ページにつき{questionsPerPage}問、合計
+            {pageCount * questionsPerPage}問を作成します。
+          </p>
+        )}
+
+        <div className="options-check">
           <input
             type="checkbox"
+            aria-label="解答をセットにする"
             checked={includeAnswers}
             onChange={(event) => setIncludeAnswers(event.target.checked)}
           />
-          解答をセットにする
-        </label>
+          <span>解答をセットにする</span>
+        </div>
 
         <button type="submit" className="options-submit">
           プレビューを見る

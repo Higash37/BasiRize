@@ -119,20 +119,23 @@ body {
   outline-offset: 2px;
 }
 
-/* カードの最小幅で、入るだけ自動で列を作る */
+/* 内容選択ページの単元カード(.problem-type-grid)と同じ列数にする。
+   枚数が列数に満たない場合は、余った列がそのまま空白になる */
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: var(--space-4);
+}
+
+@media (max-width: 900px) {
+  .subject-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 600px) {
   .subject-grid {
-    /* スマホでは必ず3列で固定 */
-    /* 1fr と書くとminmax(auto, 1fr)の意味になる。
-    minmax(0, 1fr)にすることで下限を明示的に0にしてる
-    */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
   }
 }
 
@@ -153,19 +156,15 @@ body {
 }
 
 /* margin-topでsite-mainの上パディング分だけ持ち上げ、スクロール開始直後に
-   一瞬だけ一緒に動いて見える区間（sticky特有の「固定され始めるまでの遊び」）をなくす */
+   一瞬だけ一緒に動いて見える区間（sticky特有の「固定され始めるまでの遊び」）をなくす。
+   固定するのはFlowStepper（と、あれば操作ボタン）だけにして、page-introなどの
+   説明文はここに含めず、普通にスクロールで流れるようにする */
 .sticky-page-header {
   position: sticky;
   top: 0;
   z-index: 5;
   margin-top: calc(-1 * var(--space-2));
   padding-top: var(--space-2);
-  padding-bottom: var(--space-4);
-  margin-bottom: var(--space-6);
-}
-
-.sticky-page-header .page-intro {
-  margin-bottom: 0;
 }
 
 /* 画面には出さず、スクリーンリーダーだけに伝えたい文言に使う */

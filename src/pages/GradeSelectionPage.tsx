@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import SubjectCard from "../components/SubjectCard";
+import FlowStepper from "../components/FlowStepper";
 import { gradeCardImages } from "../data/cardImages.ts";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 
@@ -15,6 +16,9 @@ function GradeSelectionPage() {
 
   return (
     <>
+      <div className="sticky-page-header">
+        <FlowStepper current="level" />
+      </div>
       <div className="page-intro">
         <h1>学年区分を選択</h1>
       </div>

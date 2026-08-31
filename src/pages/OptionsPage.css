@@ -14,13 +14,59 @@
   font-weight: 700;
 }
 
-.options-field input {
+.options-page-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.options-page-count-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  font: inherit;
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.options-page-count-btn:hover {
+  background: var(--color-muted);
+}
+
+/* ボックス幅は元の入力欄の3割ほどに絞り、両側の±ボタンで増減させる */
+.options-page-count-input {
+  width: 30%;
+  min-width: 3em;
+  min-height: 44px;
+  text-align: center;
   font: inherit;
   color: inherit;
   padding: var(--space-3);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
+}
+
+/* 上限超え。色だけに頼らず、枠線を太くして下に警告文も出す */
+.options-page-count-input-error {
+  color: var(--color-danger);
+  font-weight: 700;
+  background: var(--color-surface);
+  border: 2px solid var(--color-danger);
+}
+
+.options-summary-error {
+  color: var(--color-danger);
+  font-weight: 700;
+  background: var(--color-surface);
+  border: 1px solid var(--color-danger);
 }
 
 .options-summary {
@@ -31,13 +77,12 @@
   border-radius: var(--radius-sm);
 }
 
-/* チェックボックスは横並び。押せる高さを44px確保する */
+/* チェックボックスは横並び。文字列は押しても反応せず、チェックボックス本体だけが反応する */
 .options-check {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   min-height: 44px;
-  cursor: pointer;
 }
 
 .options-check input {

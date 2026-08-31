@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 // 自作
 import SubjectCard from "../components/SubjectCard";
+import FlowStepper from "../components/FlowStepper";
 import { subjectCardImages } from "../data/cardImages.ts";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 
@@ -22,6 +23,9 @@ function HomePage() {
 
   return (
     <>
+      <div className="sticky-page-header">
+        <FlowStepper current="subject" />
+      </div>
       <div className="page-intro">
         <h1>教科を選んでください</h1>
         <p>条件を選ぶだけでプリントを作成・印刷</p>
