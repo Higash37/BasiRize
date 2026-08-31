@@ -17,6 +17,9 @@ const distDir = path.join(rootDir, "dist");
 // 依存させず、常に本番ドメイン基準で組み立てる
 const PRODUCTION_ORIGIN = "https://basirise.com";
 
+// useDocumentMetadata.tsと同じ値
+const OG_IMAGE_URL = new URL("/basirize-favicon.png", PRODUCTION_ORIGIN).href;
+
 async function getPathsFromSitemap() {
   const sitemapPath = path.join(distDir, "sitemap.xml");
   const xml = await readFile(sitemapPath, "utf-8");
@@ -180,9 +183,12 @@ function injectMetadata(template, metadata) {
     ["og:url", canonicalUrl],
     ["og:type", "website"],
     ["og:site_name", "BasiRize"],
+    ["og:image", OG_IMAGE_URL],
+    ["og:image:alt", "BasiRizeのロゴ"],
     ["twitter:card", "summary"],
     ["twitter:title", metadata.title],
     ["twitter:description", metadata.description],
+    ["twitter:image", OG_IMAGE_URL],
   ];
   for (const [property, content] of ogTags) {
     extraTags.push(

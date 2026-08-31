@@ -5,6 +5,9 @@ import { useEffect } from "react";
 // ホスト名がそのままURLに焼き込まれてしまうため
 const PRODUCTION_ORIGIN = "https://basirise.com";
 
+// SNS共有時のサムネイル。専用画像はまだ用意していないため、既存のアイコンを流用する
+const OG_IMAGE_URL = new URL("/basirize-favicon.png", PRODUCTION_ORIGIN).href;
+
 type LanguageAlternate = {
   hreflang: string;
   path: string;
@@ -81,8 +84,8 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
       return element;
     });
 
-    // SNS共有時にタイトル・説明文が正しく出るよう、OGP/Twitterカードも
-    // title/descriptionと同じ内容で出す（画像は未整備なので付けていない）
+    // SNS共有時にタイトル・説明文・サムネイルが正しく出るよう、
+    // OGP/Twitterカードもtitle/descriptionと同じ内容で出す
     const canonicalUrl = canonical.href;
     const ogTags: [string, string][] = [
       ["og:title", title],
@@ -90,9 +93,13 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
       ["og:url", canonicalUrl],
       ["og:type", "website"],
       ["og:site_name", "BasiRize"],
+      ["og:image", OG_IMAGE_URL],
+      ["og:image:alt", "BasiRizeのロゴ"],
+      // ロゴ画像(正方形)なので、横長を想定するsummary_large_imageではなくsummaryにする
       ["twitter:card", "summary"],
       ["twitter:title", title],
       ["twitter:description", descriptionContent],
+      ["twitter:image", OG_IMAGE_URL],
     ];
     // prerenderで既に同じproperty値のタグがhead内にある場合があるため、
     // description/canonicalと同様に既存タグを再利用し重複させない
