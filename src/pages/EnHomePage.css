@@ -23,7 +23,7 @@
   box-shadow: var(--shadow-2);
 }
 
-.en-flagship-card h3 {
+.en-flagship-card h2 {
   margin: 0 0 var(--space-2);
   font-size: var(--font-size-base);
 }

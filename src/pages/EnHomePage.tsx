@@ -30,7 +30,7 @@ function EnHomePage() {
               className="en-flagship-card"
               to={`/en/worksheets/${type.slug}`}
             >
-              <h3>{type.titleEn}</h3>
+              <h2>{type.titleEn}</h2>
               <p>{type.descriptionEn}</p>
             </Link>
           </li>

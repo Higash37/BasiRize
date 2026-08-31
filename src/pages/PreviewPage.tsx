@@ -192,10 +192,10 @@ function PreviewPage() {
           {pages.map((pageProblems, pageIndex) => (
             <section key={`question-${pageIndex}`} className="sheet">
               <div className="sheet-header">
-                <h3 className="sheet-title">
+                <h2 className="sheet-title">
                   {problemType.title}
                   {pages.length > 1 && `（${pageIndex + 1}/${pages.length}）`}
-                </h3>
+                </h2>
 
                 <div className="sheet-meta">
                   <div className="sheet-meta-row">
@@ -230,10 +230,10 @@ function PreviewPage() {
             pages.map((pageProblems, pageIndex) => (
               <section key={`answer-${pageIndex}`} className="sheet">
                 <div className="sheet-header">
-                  <h3 className="sheet-title">
+                  <h2 className="sheet-title">
                     解答
                     {pages.length > 1 && `（${pageIndex + 1}/${pages.length}）`}
-                  </h3>
+                  </h2>
                 </div>
 
                 <PrintableProblemList

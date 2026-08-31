@@ -4,7 +4,7 @@
   gap: var(--space-8);
 }
 
-.problem-type-group h3 {
+.problem-type-group h2 {
   margin: 0;
   padding-bottom: var(--space-3);
   font-size: var(--font-size-base);

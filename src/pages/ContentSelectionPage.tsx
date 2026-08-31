@@ -63,7 +63,7 @@ function ContentSelectionPage() {
       <div className="problem-type-groups">
         {groups.map(([grade, gradeTypes]) => (
           <section key={grade} className="problem-type-group">
-            <h3>{grade}</h3>
+            <h2>{grade}</h2>
             <div className="problem-type-grid">
               {gradeTypes.map((type) => (
                 <ProblemTypeCard key={type.id} problemType={type} />
