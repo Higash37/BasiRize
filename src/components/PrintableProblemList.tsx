@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -13,6 +14,8 @@ type PrintableProblemListProps = {
   problems: Problem[];
   field: "question" | "answer";
   compact?: boolean;
+  // 用紙からはみ出しているかどうかが変わったときに呼ばれる
+  onOverflowChange?: (overflowing: boolean) => void;
 };
 
 type ProblemListStyle = CSSProperties & {
@@ -37,6 +40,7 @@ function PrintableProblemList({
   problems,
   field,
   compact = false,
+  onOverflowChange,
 }: PrintableProblemListProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const hasDiagrams =
@@ -46,6 +50,14 @@ function PrintableProblemList({
     [compact, hasDiagrams, problems.length],
   );
   const [layout, setLayout] = useState(initialLayout);
+
+  // onOverflowChangeは親の再描画のたびに新しい関数になりうるため、依存配列には
+  // 入れずrefで最新のものを参照する（毎回ResizeObserverを作り直さないため）
+  const onOverflowChangeRef = useRef(onOverflowChange);
+  useEffect(() => {
+    onOverflowChangeRef.current = onOverflowChange;
+  });
+  const lastOverflowingRef = useRef<boolean | null>(null);
 
   useLayoutEffect(() => {
     const list = listRef.current;
@@ -61,11 +73,16 @@ function PrintableProblemList({
         initialLayout,
       );
       applyLayoutVariables(list, measured);
-      const fitted = fitWithinSheet(list, measured);
+      const { layout: fitted, overflowing } = fitWithinSheet(list, measured);
 
       setLayout((current) =>
         isSameLayout(current, fitted) ? current : fitted,
       );
+
+      if (lastOverflowingRef.current !== overflowing) {
+        lastOverflowingRef.current = overflowing;
+        onOverflowChangeRef.current?.(overflowing);
+      }
     };
 
     updateLayout();
@@ -195,10 +212,13 @@ function calculateLayout(
   return { ...density, columns: 1, fontSize: MIN_FONT_SIZE };
 }
 
-function fitWithinSheet(list: HTMLOListElement, layout: Layout): Layout {
+function fitWithinSheet(
+  list: HTMLOListElement,
+  layout: Layout,
+): { layout: Layout; overflowing: boolean } {
   const sheet = list.closest<HTMLElement>(".sheet");
   if (!sheet) {
-    return layout;
+    return { layout, overflowing: false };
   }
 
   let fitted = layout;
@@ -220,11 +240,9 @@ function fitWithinSheet(list: HTMLOListElement, layout: Layout): Layout {
     applyLayoutVariables(list, fitted);
   }
 
-  sheet.classList.toggle(
-    "sheet-overflowing",
-    sheet.scrollHeight > sheet.clientHeight + 1,
-  );
-  return fitted;
+  const overflowing = sheet.scrollHeight > sheet.clientHeight + 1;
+  sheet.classList.toggle("sheet-overflowing", overflowing);
+  return { layout: fitted, overflowing };
 }
 
 function applyLayoutVariables(list: HTMLOListElement, layout: Layout): void {

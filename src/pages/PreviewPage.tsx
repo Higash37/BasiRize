@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import {
   generateProblems,
   getProblemTypeById,
@@ -16,6 +17,7 @@ import PrintableProblemList from "../components/PrintableProblemList";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
 import { useNoIndex } from "../hooks/useNoIndex";
+import { useScrolled } from "../hooks/useScrolled";
 
 // URLから来た文字列を正の整数に直す。おかしければ既定値を返す
 function toPositiveInt(value: string | null, fallback: number): number {
@@ -32,19 +34,27 @@ function splitIntoPages(problems: Problem[], perPage: number): Problem[][] {
   return pages;
 }
 
-function printWorksheet(): void {
-  if (document.querySelector(".sheet-overflowing")) {
-    window.alert(
-      "用紙に収まっていない問題があります。1枚あたりの問題数を減らしてください。",
-    );
-    return;
-  }
-
-  window.print();
-}
-
 function PreviewPage() {
   const [searchParams] = useSearchParams();
+  // フロー表示と同じく、スクロール中は薄く・押せない状態にする
+  const scrolled = useScrolled();
+  // はみ出している紙のidを集めたもの。1枚でもあれば印刷ボタンを押せなくする
+  // （window.alert()で毎回警告すると、連打でブラウザに無視されるようになるため）
+  const [overflowingSheetIds, setOverflowingSheetIds] = useState<Set<string>>(
+    new Set(),
+  );
+
+  function handleOverflowChange(sheetId: string, overflowing: boolean) {
+    setOverflowingSheetIds((current) => {
+      const next = new Set(current);
+      if (overflowing) {
+        next.add(sheetId);
+      } else {
+        next.delete(sheetId);
+      }
+      return next;
+    });
+  }
 
   const typeId = searchParams.get("typeId");
   const pageCount = toPositiveInt(searchParams.get("pages"), 1);
@@ -134,17 +144,24 @@ function PreviewPage() {
           problemType={{ id: problemType.id, title: problemType.title }}
         />
 
-        <div className="page-intro">
-          <h1>できあがりを確認してください</h1>
-          <p>
-            {problemType.grade}／{problemType.title}／{pages.length}枚
-            {includeAnswers && "（解答つき）"}
-          </p>
-        </div>
+        <div
+          className={
+            scrolled
+              ? "preview-toolbar preview-toolbar-scrolled"
+              : "preview-toolbar"
+          }
+        >
+          <Link
+            to="/grade-select"
+            className="preview-back"
+            aria-label="条件を選び直す"
+          >
+            <FaArrowLeft aria-hidden="true" />
+          </Link>
 
-        <div className="preview-toolbar">
           <button
             className="preview-print"
+            disabled={overflowingSheetIds.size > 0}
             onClick={() => {
               trackPrintClicked({
                 typeId: problemType.id,
@@ -153,14 +170,22 @@ function PreviewPage() {
                 totalQuestions: pageCount * perPage,
                 includeAnswers,
               });
-              printWorksheet();
+              window.print();
             }}
           >
             印刷 / PDF保存
           </button>
-          <Link to="/grade-select">条件を選び直す</Link>
         </div>
+
+        {overflowingSheetIds.size > 0 && (
+          <p className="preview-overflow-warning" role="alert">
+            はみ出している問題があります。1枚あたりの問題数を減らしてください。
+          </p>
+        )}
       </div>
+
+      {/* 見た目には出さないが、画面の主題としてh1は置いておく */}
+      <h1 className="visually-hidden">プレビュー</h1>
 
       <div className="preview-sheets">
         <div className="sheet-frame">
@@ -194,6 +219,9 @@ function PreviewPage() {
                 problems={pageProblems}
                 field="question"
                 compact={compactProblems}
+                onOverflowChange={(overflowing) =>
+                  handleOverflowChange(`question-${pageIndex}`, overflowing)
+                }
               />
             </section>
           ))}
@@ -212,6 +240,9 @@ function PreviewPage() {
                   problems={pageProblems}
                   field="answer"
                   compact={compactProblems}
+                  onOverflowChange={(overflowing) =>
+                    handleOverflowChange(`answer-${pageIndex}`, overflowing)
+                  }
                 />
               </section>
             ))}

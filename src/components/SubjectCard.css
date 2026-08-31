@@ -31,7 +31,9 @@
 
 /* アイコンは装飾なので、文章用の文字サイズスケールとは別に持つ */
 .subject-card-thumb {
-  aspect-ratio: 210 / 297; /* A4サイズで固定 */
+  aspect-ratio: 1 / 1; /* ProblemTypeCardの画像比率に合わせる */
+  flex-shrink: 0;
+  min-height: 0; /* flexアイテムの既定min-height:autoがaspect-ratioの計算を狂わせるため */
   font-size: 32px;
   border-bottom: 3px solid var(--color-border);
   position: relative;
