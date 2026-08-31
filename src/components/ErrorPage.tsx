@@ -11,6 +11,9 @@ type ErrorPageProps = {
   message: string;
   backTo?: string;
   backLabel?: string;
+  // 指定すると、SPA内リンクの代わりにこの関数を呼ぶボタンを出す。
+  // 例: チャンク読み込み失敗時は、遷移ではなく本当のページ再読み込みが要る
+  onBackClick?: () => void;
 };
 
 function ErrorPage({
@@ -19,6 +22,7 @@ function ErrorPage({
   message,
   backTo = "/grade-select",
   backLabel = "学年区分を選び直す",
+  onBackClick,
 }: ErrorPageProps) {
   const location = useLocation();
 
@@ -46,9 +50,19 @@ function ErrorPage({
         </span>
         <h1 className="error-page-title">{title}</h1>
         <p className="error-page-message">{message}</p>
-        <Link to={backTo} className="error-page-back">
-          {backLabel}
-        </Link>
+        {onBackClick ? (
+          <button
+            type="button"
+            className="error-page-back"
+            onClick={onBackClick}
+          >
+            {backLabel}
+          </button>
+        ) : (
+          <Link to={backTo} className="error-page-back">
+            {backLabel}
+          </Link>
+        )}
       </div>
     </div>
   );
