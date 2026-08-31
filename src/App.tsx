@@ -1,16 +1,21 @@
 // どのページを表示するかの交通整理役
+import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
 // Page
-import HomePage from "./pages/HomePage";
-import GradeSelectionPage from "./pages/GradeSelectionPage";
-import ContentSelectionPage from "./pages/ContentSelectionPage";
-import OptionsPage from "./pages/OptionsPage";
-import PreviewPage from "./pages/PreviewPage";
-import EnHomePage from "./pages/EnHomePage";
-import EnWorksheetPage from "./pages/EnWorksheetPage";
-import NotFoundPage from "./pages/NotFoundPage";
+// ページ単位で分割し、今開いていないページの分まで最初にダウンロードしなくて済むようにする
+// （Suspenseの受け皿はLayout.tsxの<Outlet />側に用意している）
+const HomePage = lazy(() => import("./pages/HomePage"));
+const GradeSelectionPage = lazy(() => import("./pages/GradeSelectionPage"));
+const ContentSelectionPage = lazy(
+  () => import("./pages/ContentSelectionPage"),
+);
+const OptionsPage = lazy(() => import("./pages/OptionsPage"));
+const PreviewPage = lazy(() => import("./pages/PreviewPage"));
+const EnHomePage = lazy(() => import("./pages/EnHomePage"));
+const EnWorksheetPage = lazy(() => import("./pages/EnWorksheetPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
