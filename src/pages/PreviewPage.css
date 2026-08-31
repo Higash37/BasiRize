@@ -246,7 +246,14 @@
 
   .sheet {
     width: auto;
-    height: auto;
+    /*
+      heightをautoにすると、.sheet-problemsのcolumn-count(段組み)が
+      高さの基準を失い、ブラウザによっては段組みが崩れて1列になってしまう。
+      @pageのmargin(20mm × 上下)を差し引いた、紙1枚ぶんの印字可能な高さを
+      そのまま指定することで、画面プレビュー(height:297mm)と同じ基準で
+      段組みを計算させる
+    */
+    height: 257mm;
     max-width: none;
     min-height: auto;
     margin: 0;
