@@ -22,6 +22,11 @@ import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 import { getProblemTypes } from "../problem-generation";
 import type { Level } from "../problem-generation";
 import { SEO_LEVELS, getLevelPath } from "../seoRoutes";
+import {
+  trackSubjectSelected,
+  trackHomeFaqOpened,
+  trackHomeCoverageClicked,
+} from "../analytics";
 import "./HomePage.css";
 
 // 対応している学年・単元セクションで、学年区分選択ページと同じ校舎イラストを使い回す
@@ -205,7 +210,10 @@ function HomePage() {
           title="数学"
           color="var(--subject-math)"
           imageSrc={subjectCardImages.math}
-          onClick={() => navigate("/grade-select")}
+          onClick={() => {
+            trackSubjectSelected({ subject: "math" });
+            navigate("/grade-select");
+          }}
         />
       </div>
       <p className="home-more-subjects-note">他の教科は準備中です</p>
@@ -291,7 +299,12 @@ function HomePage() {
                 <img className="home-coverage-image" src={LEVEL_IMAGES[level]} alt="" />
                 <div className="home-coverage-body">
                   <h3>
-                    <Link to={getLevelPath(level)}>{level}</Link>
+                    <Link
+                      to={getLevelPath(level)}
+                      onClick={() => trackHomeCoverageClicked({ level })}
+                    >
+                      {level}
+                    </Link>
                   </h3>
                   <p>{grades.join("・")}</p>
                 </div>
@@ -317,7 +330,15 @@ function HomePage() {
         <h2 id="home-faq-heading">よくある質問</h2>
         <div className="home-faq-list">
           {HOME_FAQ.map((item) => (
-            <details key={item.question} className="home-faq-item">
+            <details
+              key={item.question}
+              className="home-faq-item"
+              onToggle={(event) => {
+                if (event.currentTarget.open) {
+                  trackHomeFaqOpened({ question: item.question });
+                }
+              }}
+            >
               <summary>{item.question}</summary>
               <p>{item.answer}</p>
             </details>
