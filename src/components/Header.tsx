@@ -10,6 +10,7 @@ function Header() {
         {/* 隣にmath²ドリルの文字があるので装飾扱い。alt はつけない */}
         <img className="site-header-icon" src="/basirize-favicon.png" alt="" />
         <span className="site-header-name">math²ドリル</span>
+        <span className="site-header-reading">（マスマスドリル）</span>
         <span className="site-header-tagline">ランダム生成、今すぐ印刷</span>
       </Link>
 
