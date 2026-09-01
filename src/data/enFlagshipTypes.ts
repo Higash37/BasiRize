@@ -46,6 +46,39 @@ export const enFlagshipTypes: EnFlagshipType[] = [
     worksheetNote:
       "The generated worksheet text is in Japanese (the standard style for this problem type), but the underlying math is universal.",
   },
+  {
+    slug: "multiplication",
+    typeId: "e3-multiplication",
+    titleEn: "Multiplication Worksheets (Grade 3)",
+    descriptionEn:
+      "2-digit by 1-digit multiplication practice for elementary students. A fresh set of problems every time, with an answer key included.",
+    worksheetNote: noJapaneseNote,
+  },
+  {
+    slug: "division",
+    typeId: "e4-division",
+    titleEn: "Division Worksheets (Grade 4)",
+    descriptionEn:
+      "Division by 2-digit numbers with no remainder, for elementary students. A fresh set of problems every time, with an answer key included.",
+    worksheetNote: noJapaneseNote,
+  },
+  {
+    slug: "fractions",
+    typeId: "e2-simple-fraction",
+    titleEn: "Fraction Worksheets (Grade 2)",
+    descriptionEn:
+      "An introduction to fractions — naming one equal part of a whole. A fresh set of problems every time, with an answer key included.",
+    worksheetNote:
+      "The generated worksheet text includes short Japanese phrases (a simple word-problem format), but the underlying math is universal.",
+  },
+  {
+    slug: "decimals",
+    typeId: "e4-decimals",
+    titleEn: "Decimal Worksheets (Grade 4)",
+    descriptionEn:
+      "Addition and subtraction of decimals to the hundredths place, for elementary students. A fresh set of problems every time, with an answer key included.",
+    worksheetNote: noJapaneseNote,
+  },
 ];
 
 export function getEnFlagshipType(slug: string): EnFlagshipType | undefined {
