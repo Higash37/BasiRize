@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import SubjectCard from "../components/SubjectCard";
 import FlowStepper from "../components/FlowStepper";
 import { gradeCardImages } from "../data/cardImages.ts";
@@ -6,8 +5,6 @@ import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 import { getLevelPath } from "../seoRoutes";
 
 function GradeSelectionPage() {
-  const navigate = useNavigate();
-
   useDocumentMetadata({
     title: "学年を選んで算数・数学の問題プリントを作成 | math²ドリル",
     description:
@@ -27,17 +24,17 @@ function GradeSelectionPage() {
       <div className="subject-grid">
         <SubjectCard
           title="小学校"
-          onClick={() => navigate(getLevelPath("小学校"))}
+          to={getLevelPath("小学校")}
           imageSrc={gradeCardImages.elementary}
         />
         <SubjectCard
           title="中学校"
-          onClick={() => navigate(getLevelPath("中学校"))}
+          to={getLevelPath("中学校")}
           imageSrc={gradeCardImages.juniorHigh}
         />
         <SubjectCard
           title="高校"
-          onClick={() => navigate(getLevelPath("高校"))}
+          to={getLevelPath("高校")}
           imageSrc={gradeCardImages.highSchool}
         />
         <SubjectCard

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   FaGraduationCap,
   FaRandom,
@@ -21,7 +21,7 @@ import { subjectCardImages, gradeCardImages } from "../data/cardImages.ts";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 import { getProblemTypes } from "../problem-generation";
 import type { Level } from "../problem-generation";
-import { SEO_LEVELS, getLevelPath } from "../seoRoutes";
+import { SEO_LEVELS, getGradePath, getLevelPath } from "../seoRoutes";
 import {
   trackSubjectSelected,
   trackHomeFaqOpened,
@@ -82,7 +82,8 @@ const HOME_FEATURES = [
   {
     icon: <FaPrint aria-hidden="true" />,
     title: "解答つきで印刷・PDF保存",
-    description: "採点用の解答をまとめて出力し、そのまま印刷やPDF保存ができます。",
+    description:
+      "採点用の解答をまとめて出力し、そのまま印刷やPDF保存ができます。",
   },
   {
     icon: <FaGift aria-hidden="true" />,
@@ -158,11 +159,13 @@ const HOME_FAQ = [
   },
   {
     question: "塾の授業や宿題で配布してもいいですか？",
-    answer: "はい。生成したプリントは印刷して、授業や宿題としてお使いいただけます。",
+    answer:
+      "はい。生成したプリントは印刷して、授業や宿題としてお使いいただけます。",
   },
   {
     question: "同じ問題が続けて出ないようにできますか？",
-    answer: "生成のたびに数値をランダムに変えているので、毎回ちがう問題になります。",
+    answer:
+      "生成のたびに数値をランダムに変えているので、毎回ちがう問題になります。",
   },
   {
     question: "印刷以外にPDFで保存できますか？",
@@ -176,11 +179,6 @@ const HOME_FAQ = [
 ];
 
 function HomePage() {
-  // onClick{() => navigate(/...)}で移動を実行する関数を設定
-  // <a href></a>だとブラウザがページ全体を作り直してしまう
-  // useNavigateだとサーバには何も聞かず、Outletの中身だけ入れ替えられる
-  const navigate = useNavigate();
-
   // index.htmlの既定値と同じ内容を、英語版へのhreflang付きで明示する
   useDocumentMetadata({
     title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| math²ドリル",
@@ -200,7 +198,7 @@ function HomePage() {
       {/* このページだけはLPとして下に長いので、FlowStepperは固定せず一緒にスクロールさせる */}
       <FlowStepper current="subject" />
       <div className="page-intro">
-        <h1>教科を選んでください</h1>
+        <h1>算数・数学の問題プリントを無料で自動生成</h1>
         <p>
           学年・単元・問題数を選ぶだけで、毎回新しい算数・数学プリントを自動生成。解答つきでそのまま印刷・PDF保存できます。
         </p>
@@ -210,9 +208,9 @@ function HomePage() {
           title="数学"
           color="var(--subject-math)"
           imageSrc={subjectCardImages.math}
+          to="/grade-select"
           onClick={() => {
             trackSubjectSelected({ subject: "math" });
-            navigate("/grade-select");
           }}
         />
       </div>
@@ -244,7 +242,10 @@ function HomePage() {
         </ul>
       </section>
 
-      <section className="home-section home-section-muted" aria-labelledby="home-usecases-heading">
+      <section
+        className="home-section home-section-muted"
+        aria-labelledby="home-usecases-heading"
+      >
         <h2 id="home-usecases-heading">こんな場面で使えます</h2>
         <ul className="home-usecase-list">
           {HOME_USE_CASES.map((item) => (
@@ -287,7 +288,10 @@ function HomePage() {
         </ol>
       </section>
 
-      <section className="home-section home-section-muted" aria-labelledby="home-coverage-heading">
+      <section
+        className="home-section home-section-muted"
+        aria-labelledby="home-coverage-heading"
+      >
         <h2 id="home-coverage-heading">対応している学年・単元</h2>
         <div className="home-coverage-list">
           {SEO_LEVELS.map((level) => {
@@ -296,7 +300,11 @@ function HomePage() {
             ];
             return (
               <div key={level} className="home-coverage-item">
-                <img className="home-coverage-image" src={LEVEL_IMAGES[level]} alt="" />
+                <img
+                  className="home-coverage-image"
+                  src={LEVEL_IMAGES[level]}
+                  alt=""
+                />
                 <div className="home-coverage-body">
                   <h3>
                     <Link
@@ -306,7 +314,14 @@ function HomePage() {
                       {level}
                     </Link>
                   </h3>
-                  <p>{grades.join("・")}</p>
+                  <p>
+                    {grades.map((grade, index) => (
+                      <span key={grade}>
+                        {index > 0 && "・"}
+                        <Link to={getGradePath(level, grade)}>{grade}</Link>
+                      </span>
+                    ))}
+                  </p>
                 </div>
               </div>
             );
@@ -326,7 +341,10 @@ function HomePage() {
         </ul>
       </section>
 
-      <section className="home-section home-section-muted" aria-labelledby="home-faq-heading">
+      <section
+        className="home-section home-section-muted"
+        aria-labelledby="home-faq-heading"
+      >
         <h2 id="home-faq-heading">よくある質問</h2>
         <div className="home-faq-list">
           {HOME_FAQ.map((item) => (

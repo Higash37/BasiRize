@@ -3,16 +3,21 @@ import { useState } from "react";
 // Link: <Link to="...">と書く。押すと画面を再読み込みせずに移動する（HTMLの<link>とは別物）
 // useNavigate: 別ページに移動する関数をもらう
 // useSearchParams: URLの?以降を読むフック
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 // 自作
-import { getProblemTypeById } from "../problem-generation";
+import { getProblemTypeById, getProblemTypes } from "../problem-generation";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
 import { enFlagshipTypes } from "../data/enFlagshipTypes";
 import { trackOptionsSubmitted } from "../analytics";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
-import { getLevelPath } from "../seoRoutes";
+import { getGradePath, getLevelPath } from "../seoRoutes";
 // CSSスタイル
 import "./OptionsPage.css";
 
@@ -45,6 +50,14 @@ function OptionsPage() {
   const [includeAnswers, setIncludeAnswers] = useState(true);
   const problemType = typeId ? getProblemTypeById(typeId) : undefined;
   const questionsPerPage = problemType?.recommendedQuestionsPerPage ?? 10;
+  const relatedProblemTypes = problemType
+    ? getProblemTypes(problemType.level)
+        .filter(
+          (type) =>
+            type.grade === problemType.grade && type.id !== problemType.id,
+        )
+        .slice(0, 6)
+    : [];
 
   const enFlagship = problemType
     ? enFlagshipTypes.find((type) => type.typeId === problemType.id)
@@ -73,6 +86,10 @@ function OptionsPage() {
             {
               name: problemType.level,
               path: getLevelPath(problemType.level),
+            },
+            {
+              name: problemType.grade,
+              path: getGradePath(problemType.level, problemType.grade),
             },
             { name: problemType.title, path: `/problems/${problemType.id}` },
           ],
@@ -114,7 +131,10 @@ function OptionsPage() {
       </div>
 
       <div className="page-intro">
-        <h1>{problemType.title}の設定</h1>
+        <h1>
+          {problemType.grade}・{problemType.title}の無料問題プリント
+        </h1>
+        <p>{problemType.description}</p>
       </div>
 
       <form
@@ -213,6 +233,30 @@ function OptionsPage() {
           プレビューを見る
         </button>
       </form>
+
+      {relatedProblemTypes.length > 0 && (
+        <section
+          className="options-related"
+          aria-labelledby="options-related-heading"
+        >
+          <h2 id="options-related-heading">
+            {problemType.grade}の関連する問題プリント
+          </h2>
+          <ul>
+            {relatedProblemTypes.map((type) => (
+              <li key={type.id}>
+                <Link to={`/problems/${type.id}`}>{type.title}</Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            className="options-related-all"
+            to={getGradePath(problemType.level, problemType.grade)}
+          >
+            {problemType.grade}の問題プリントをすべて見る
+          </Link>
+        </section>
+      )}
     </>
   );
 }

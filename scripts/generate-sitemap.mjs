@@ -28,33 +28,45 @@ async function loadRegistries() {
     const { enFlagshipTypes } = await server.ssrLoadModule(
       "/src/data/enFlagshipTypes.ts",
     );
-    const { SEO_LEVELS, getLevelPath } =
+    const { SEO_LEVELS, SEO_GRADES, getLevelPath, getGradePath } =
       await server.ssrLoadModule("/src/seoRoutes.ts");
-    return { getProblemTypes, enFlagshipTypes, SEO_LEVELS, getLevelPath };
+    return {
+      getProblemTypes,
+      enFlagshipTypes,
+      SEO_LEVELS,
+      SEO_GRADES,
+      getLevelPath,
+      getGradePath,
+    };
   } finally {
     await server.close();
   }
 }
 
 async function main() {
-  const { getProblemTypes, enFlagshipTypes, SEO_LEVELS, getLevelPath } =
-    await loadRegistries();
+  const {
+    getProblemTypes,
+    enFlagshipTypes,
+    SEO_LEVELS,
+    SEO_GRADES,
+    getLevelPath,
+    getGradePath,
+  } = await loadRegistries();
 
   const paths = [
     "/",
     "/grade-select",
     ...SEO_LEVELS.map(getLevelPath),
+    ...SEO_GRADES.map(({ level, grade }) => getGradePath(level, grade)),
     "/en",
     ...enFlagshipTypes.map((type) => `/en/worksheets/${type.slug}`),
     ...getProblemTypes().map((type) => `/problems/${type.id}`),
   ];
 
-  const today = new Date().toISOString().slice(0, 10);
   const urlEntries = paths
-    .map(
-      (p) =>
-        `  <url><loc>${PRODUCTION_ORIGIN}${p}</loc><lastmod>${today}</lastmod></url>`,
-    )
+    // 実際の更新日を追跡していないためlastmodは付けない。
+    // ビルド日を入れると、内容が変わっていない全URLを更新済みと誤って伝えてしまう。
+    .map((p) => `  <url><loc>${PRODUCTION_ORIGIN}${p}</loc></url>`)
     .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`;
