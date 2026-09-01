@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./SubjectCard.css";
 import noImage from "../assets/no-image.webp";
 type SubjectCardProps = {
@@ -5,18 +6,14 @@ type SubjectCardProps = {
   // 画像の下線につける教科色。未指定なら --color-border のグレー
   color?: string;
   imageSrc?: string;
+  to?: string;
   onClick?: () => void;
   disabled?: boolean;
 };
 
 function SubjectCard(props: SubjectCardProps) {
-  return (
-    // 遷移先を知らず disabled も要るので、<a> ではなく <button>
-    <button
-      className="subject-card"
-      onClick={props.onClick}
-      disabled={props.disabled}
-    >
+  const content = (
+    <>
       {/* borderColor は4辺に効くが、太さがあるのは border-bottom だけ */}
       <span
         className="subject-card-thumb"
@@ -32,6 +29,26 @@ function SubjectCard(props: SubjectCardProps) {
       </span>
 
       <span className="subject-card-title">{props.title}</span>
+    </>
+  );
+
+  // 遷移先があるカードはリンクにする。検索エンジンが次のページを辿れ、
+  // 利用者も新しいタブで開くなど通常のリンク操作ができる。
+  if (props.to && !props.disabled) {
+    return (
+      <Link className="subject-card" to={props.to} onClick={props.onClick}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      className="subject-card"
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
+      {content}
     </button>
   );
 }

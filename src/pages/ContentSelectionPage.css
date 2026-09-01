@@ -17,6 +17,14 @@
   gap: var(--space-4);
 }
 
+.problem-type-grade-link {
+  align-self: flex-start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+
 .problem-type-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

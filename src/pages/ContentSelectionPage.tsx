@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import ProblemTypeCard from "../components/ProblemTypeCard";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
@@ -8,26 +8,62 @@ import {
   type ProblemTypeSummary,
 } from "../problem-generation";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
-import { getLevelFromSlug, getLevelPath } from "../seoRoutes";
+import {
+  getLevelFromSlug,
+  getLevelPath,
+  getLevelSeoContent,
+  getGradeFromSlug,
+  getGradePath,
+  getGradeSeoContent,
+} from "../seoRoutes";
 import "./ContentSelectionPage.css";
 
 function ContentSelectionPage() {
   const [searchParams] = useSearchParams();
-  const { levelSlug } = useParams();
+  const { levelSlug, gradeSlug } = useParams();
   // /content-select?level=... は既存URLとの互換用。正規URLは /math/:levelSlug。
   const level = getLevelFromSlug(levelSlug) ?? searchParams.get("level");
-  const types = level ? getProblemTypes(level) : [];
+  const selectedGrade = level
+    ? getGradeFromSlug(level as Level, gradeSlug)
+    : undefined;
+  const allTypes = level ? getProblemTypes(level) : [];
+  const types = gradeSlug
+    ? selectedGrade
+      ? allTypes.filter((type) => type.grade === selectedGrade)
+      : []
+    : allTypes;
+  const seoContent =
+    level && types.length > 0
+      ? selectedGrade
+        ? getGradeSeoContent(
+            level as Level,
+            selectedGrade,
+            types.map((type) => type.title),
+          )
+        : getLevelSeoContent(level as Level)
+      : undefined;
 
   useDocumentMetadata(
-    level && types.length > 0
+    level && seoContent
       ? {
-          title: `${level}の算数・数学 問題プリント一覧 | math²ドリル`,
-          description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
-          canonicalPath: getLevelPath(level as Level),
-          breadcrumbs: [
-            { name: "数学", path: "/" },
-            { name: level, path: getLevelPath(level as Level) },
-          ],
+          title: seoContent.title,
+          description: seoContent.description,
+          canonicalPath: selectedGrade
+            ? getGradePath(level as Level, selectedGrade)
+            : getLevelPath(level as Level),
+          breadcrumbs: selectedGrade
+            ? [
+                { name: "数学", path: "/" },
+                { name: level, path: getLevelPath(level as Level) },
+                {
+                  name: selectedGrade,
+                  path: getGradePath(level as Level, selectedGrade),
+                },
+              ]
+            : [
+                { name: "数学", path: "/" },
+                { name: level, path: getLevelPath(level as Level) },
+              ],
         }
       : undefined,
   );
@@ -38,6 +74,16 @@ function ContentSelectionPage() {
         reason="missing-level"
         title="学年区分が指定されていません"
         message="学年区分を選び直してください。"
+      />
+    );
+  }
+
+  if (gradeSlug && !selectedGrade) {
+    return (
+      <ErrorPage
+        reason="grade-not-found"
+        title="学年が見つかりません"
+        message="学年を選び直してください。"
       />
     );
   }
@@ -58,15 +104,27 @@ function ContentSelectionPage() {
     <>
       <div className="sticky-page-header">
         <FlowStepper level={level as Level} current="level" />
-        <h1 className="visually-hidden">
-          内容を選んでください（{level}／{types.length}種類）
-        </h1>
+      </div>
+
+      <div className="page-intro">
+        <h1>{seoContent?.heading}</h1>
+        <p>
+          {seoContent?.introduction} 現在{types.length}種類から選べます。
+        </p>
       </div>
 
       <div className="problem-type-groups">
         {groups.map(([grade, gradeTypes]) => (
           <section key={grade} className="problem-type-group">
             <h2>{grade}</h2>
+            {!selectedGrade && (
+              <Link
+                className="problem-type-grade-link"
+                to={getGradePath(level as Level, grade)}
+              >
+                {grade}のプリント一覧を見る
+              </Link>
+            )}
             <div className="problem-type-grid">
               {gradeTypes.map((type) => (
                 <ProblemTypeCard key={type.id} problemType={type} />

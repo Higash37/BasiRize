@@ -12,6 +12,8 @@
   cursor: pointer;
   transition: box-shadow var(--transition);
   user-select: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 .subject-card:hover:not(:disabled) {

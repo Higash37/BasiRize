@@ -24,6 +24,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/grade-select" element={<GradeSelectionPage />} />
         <Route path="/math/:levelSlug" element={<ContentSelectionPage />} />
+        <Route
+          path="/math/:levelSlug/:gradeSlug"
+          element={<ContentSelectionPage />}
+        />
         {/* 既存のブックマークとの互換用。SEO上は/math/:levelSlugを正規URLにする */}
         <Route path="/content-select" element={<ContentSelectionPage />} />
         <Route path="/problems/:typeId" element={<OptionsPage />} />

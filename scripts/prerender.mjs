@@ -28,11 +28,13 @@ const HOME_FAQ = [
   },
   {
     question: "塾の授業や宿題で配布してもいいですか？",
-    answer: "はい。生成したプリントは印刷して、授業や宿題としてお使いいただけます。",
+    answer:
+      "はい。生成したプリントは印刷して、授業や宿題としてお使いいただけます。",
   },
   {
     question: "同じ問題が続けて出ないようにできますか？",
-    answer: "生成のたびに数値をランダムに変えているので、毎回ちがう問題になります。",
+    answer:
+      "生成のたびに数値をランダムに変えているので、毎回ちがう問題になります。",
   },
   {
     question: "印刷以外にPDFで保存できますか？",
@@ -103,15 +105,47 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
     };
   }
 
+  const gradeMatch = pathname.match(/^\/math\/([^/]+)\/([^/]+)$/);
+  if (gradeMatch) {
+    const level = seoRoutes.getLevelFromSlug(gradeMatch[1]);
+    const grade = level
+      ? seoRoutes.getGradeFromSlug(level, gradeMatch[2])
+      : undefined;
+    const problemTypes =
+      level && grade
+        ? registry.getProblemTypes(level).filter((type) => type.grade === grade)
+        : [];
+    if (!level || !grade || problemTypes.length === 0) {
+      return undefined;
+    }
+    const gradeSeoContent = seoRoutes.getGradeSeoContent(
+      level,
+      grade,
+      problemTypes.map((type) => type.title),
+    );
+    return {
+      ...gradeSeoContent,
+      canonicalPath: seoRoutes.getGradePath(level, grade),
+      breadcrumbs: [
+        { name: "数学", path: "/" },
+        { name: level, path: seoRoutes.getLevelPath(level) },
+        { name: grade, path: seoRoutes.getGradePath(level, grade) },
+      ],
+    };
+  }
+
   const levelMatch = pathname.match(/^\/math\/([^/]+)$/);
   if (levelMatch) {
     const level = seoRoutes.getLevelFromSlug(levelMatch[1]);
     if (!level) {
       return undefined;
     }
+    const levelSeoContent = seoRoutes.getLevelSeoContent(level);
     return {
-      title: `${level}の算数・数学 問題プリント一覧 | math²ドリル`,
-      description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
+      title: levelSeoContent.title,
+      description: levelSeoContent.description,
+      heading: levelSeoContent.heading,
+      introduction: levelSeoContent.introduction,
       canonicalPath: seoRoutes.getLevelPath(level),
       breadcrumbs: [
         { name: "数学", path: "/" },
@@ -192,6 +226,10 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
           name: problemType.level,
           path: seoRoutes.getLevelPath(problemType.level),
         },
+        {
+          name: problemType.grade,
+          path: seoRoutes.getGradePath(problemType.level, problemType.grade),
+        },
         { name: problemType.title, path: `/problems/${problemType.id}` },
       ],
     };
@@ -260,10 +298,31 @@ function renderStaticContent(pathname, seoData, metadata) {
       ? seoRoutes.getLevelFromSlug(levelMatch[1])
       : undefined;
     if (level) {
-      links = registry.getProblemTypes(level).map((type) => ({
-        label: `${type.grade} ${type.title}`,
-        path: `/problems/${type.id}`,
+      intro = metadata.introduction ?? metadata.description;
+      links = seoRoutes.SEO_GRADES.filter(
+        (gradeRoute) => gradeRoute.level === level,
+      ).map((gradeRoute) => ({
+        label: `${gradeRoute.displayName}の問題プリント`,
+        path: seoRoutes.getGradePath(level, gradeRoute.grade),
       }));
+    }
+
+    const gradeMatch = pathname.match(/^\/math\/([^/]+)\/([^/]+)$/);
+    const gradeLevel = gradeMatch
+      ? seoRoutes.getLevelFromSlug(gradeMatch[1])
+      : undefined;
+    const grade = gradeLevel
+      ? seoRoutes.getGradeFromSlug(gradeLevel, gradeMatch[2])
+      : undefined;
+    if (gradeLevel && grade) {
+      intro = metadata.introduction ?? metadata.description;
+      links = registry
+        .getProblemTypes(gradeLevel)
+        .filter((type) => type.grade === grade)
+        .map((type) => ({
+          label: `${type.grade} ${type.title}`,
+          path: `/problems/${type.id}`,
+        }));
     }
 
     const problemMatch = pathname.match(/^\/problems\/([^/]+)$/);
@@ -272,10 +331,21 @@ function renderStaticContent(pathname, seoData, metadata) {
       : undefined;
     if (problemType) {
       intro = `${problemType.description} 学年と単元に合った問題を毎回新しく生成し、解答付きで印刷・PDF保存できます。`;
+      const relatedTypes = registry
+        .getProblemTypes(problemType.level)
+        .filter(
+          (type) =>
+            type.grade === problemType.grade && type.id !== problemType.id,
+        )
+        .slice(0, 6);
       links = [
+        ...relatedTypes.map((type) => ({
+          label: `${problemType.grade} ${type.title}`,
+          path: `/problems/${type.id}`,
+        })),
         {
-          label: `${problemType.level}の問題プリント一覧`,
-          path: seoRoutes.getLevelPath(problemType.level),
+          label: `${problemType.grade}の問題プリント一覧`,
+          path: seoRoutes.getGradePath(problemType.level, problemType.grade),
         },
       ];
     }
@@ -295,7 +365,9 @@ function renderStaticContent(pathname, seoData, metadata) {
     }
   }
 
-  const heading = metadata.title.replace(/\s*\|\s*(math²ドリル|Math² Drill)$/, "");
+  const heading =
+    metadata.heading ??
+    metadata.title.replace(/\s*\|\s*(math²ドリル|Math² Drill)$/, "");
   const faqSection = pathname === "/" ? faqHtml(HOME_FAQ) : "";
   return `<main data-prerendered-content><h1>${escapeHtml(heading)}</h1><p>${escapeHtml(intro)}</p>${linkList(links)}${faqSection}</main>`;
 }
