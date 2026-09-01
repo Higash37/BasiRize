@@ -1,9 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaGithub } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import "./Header.css";
 
 function Header() {
+  // /en配下かどうかで、切り替え先と表示文言を反転させる
+  const { pathname } = useLocation();
+  const isEnglishPage = pathname.startsWith("/en");
+
   return (
     <header className="site-header">
       <Link to="/" className="site-header-logo">
@@ -15,6 +19,13 @@ function Header() {
       </Link>
 
       <nav className="site-header-links" aria-label="外部リンク">
+        <Link
+          to={isEnglishPage ? "/" : "/en"}
+          lang={isEnglishPage ? "ja" : "en"}
+          className="site-header-lang-link"
+        >
+          {isEnglishPage ? "日本語" : "EN"}
+        </Link>
         <a
           target="_blank"
           rel="noopener noreferrer"

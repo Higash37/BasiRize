@@ -85,7 +85,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
     return {
       title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| math²ドリル",
       description:
-        "「あと5分で欲しい」に応える算数・数学プリント生成サイト。学年と単元を選ぶだけで、毎回新しい問題をランダム生成。小学校から高校まで対応、今すぐ印刷・PDF保存できます。",
+        "「あと5分で欲しい」に応える、塾講師・家庭学習向けの算数・数学プリント生成サイト。学年と単元を選ぶだけで、毎回新しい問題をランダム生成。宿題・小テスト対策にも、今すぐ印刷・PDF保存できます。",
       canonicalPath: "/",
       alternates: [
         { hreflang: "ja", path: "/" },
