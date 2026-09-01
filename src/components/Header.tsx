@@ -14,11 +14,21 @@ function Header() {
       </Link>
 
       <nav className="site-header-links" aria-label="外部リンク">
-        <a target="_blank" href="https://github.com/Higash37/BasiRize">
-          <FaGithub />
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/Higash37/BasiRize"
+          aria-label="GitHubリポジトリ"
+        >
+          <FaGithub aria-hidden="true" />
         </a>
-        <a target="_blank" href="https://forms.gle/aQtBaYdcyHXPDixk8">
-          <CiMail />
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://forms.gle/aQtBaYdcyHXPDixk8"
+          aria-label="お問い合わせフォーム"
+        >
+          <CiMail aria-hidden="true" />
         </a>
       </nav>
     </header>
