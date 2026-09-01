@@ -22,6 +22,10 @@ function EnWorksheetPage() {
           canonicalPath: `/en/worksheets/${flagshipType.slug}`,
           lang: "en",
           alternates: [
+            {
+              hreflang: "en",
+              path: `/en/worksheets/${flagshipType.slug}`,
+            },
             { hreflang: "ja", path: `/problems/${problemType.id}` },
           ],
           breadcrumbs: [
@@ -62,10 +66,7 @@ function EnWorksheetPage() {
         ))}
       </ol>
 
-      <Link
-        to={`/problems/${problemType.id}`}
-        className="en-worksheet-cta"
-      >
+      <Link to={`/problems/${problemType.id}`} className="en-worksheet-cta">
         Generate &amp; print this worksheet →
       </Link>
 

@@ -1,0 +1,285 @@
+/* 数学カード1枚だけなので、共通のsubject-grid(5列)は使わずカード幅だけ確保する */
+.home-subject-single {
+  max-width: 200px;
+}
+
+.home-more-subjects-note {
+  margin: var(--space-4) 0 var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.home-more-subjects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-more-subjects-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  padding-right: var(--space-3);
+  background: var(--color-muted);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
+
+.home-more-subjects-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-surface);
+  font-size: 0.875rem;
+}
+
+.home-section {
+  padding: var(--space-8) 0;
+}
+
+.home-section h2 {
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-6);
+}
+
+/* 全セクション白背景だと単調なので、使い方とFAQだけ地の色を変えて区切る */
+.home-section-muted {
+  background: var(--color-muted);
+  border-radius: var(--radius);
+  padding: var(--space-6) var(--space-4);
+}
+
+/* BasiRizeでできること */
+.home-feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-feature-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-1);
+}
+
+.home-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-size: var(--font-size-lg);
+}
+
+.home-feature-card h3 {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-2);
+}
+
+.home-feature-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* こんな場面で使えます。特徴カードと差をつけるため、箱で囲まず
+   見出しにアイコンを添えるだけの、文章寄りの並びにしている */
+.home-usecase-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-usecase-item h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-1);
+}
+
+.home-usecase-icon {
+  color: var(--color-accent);
+  font-size: var(--font-size-lg);
+}
+
+.home-usecase-item p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* 印刷のコツ。アイコンではなく左の帯で区切り、さらに違う見た目にする */
+.home-tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-tips-item {
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--color-accent);
+}
+
+.home-tips-item h3 {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-1);
+}
+
+.home-tips-item p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* 使い方 */
+.home-step-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-step {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+/* 番号は装飾。順序はol自体がスクリーンリーダーに伝える */
+.home-step-number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-weight: 700;
+}
+
+.home-step-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+}
+
+.home-step h3 {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-1);
+}
+
+.home-step p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* 対応している学年・単元 */
+.home-coverage-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.home-coverage-item {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.home-coverage-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.home-coverage-body {
+  padding: var(--space-4);
+}
+
+.home-coverage-item h3 {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-2);
+}
+
+.home-coverage-item p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* よくある質問 */
+.home-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.home-faq-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.home-faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.home-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 開閉状態を色だけでなく記号の形でも伝える */
+.home-faq-item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+}
+
+.home-faq-item[open] summary::after {
+  content: "\2212";
+}
+
+.home-faq-item p {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--color-text-muted);
+}

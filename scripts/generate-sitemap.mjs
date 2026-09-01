@@ -13,10 +13,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, "..");
 const PRODUCTION_ORIGIN = "https://basirise.com";
 
-// content-selectページが実際に受け付ける学年区分
-// (src/problem-generation/types.tsのLevel型と一致させる)
-const LEVELS = ["小学校", "中学校", "高校"];
-
 async function loadRegistries() {
   const server = await createServer({
     root: rootDir,
@@ -32,21 +28,22 @@ async function loadRegistries() {
     const { enFlagshipTypes } = await server.ssrLoadModule(
       "/src/data/enFlagshipTypes.ts",
     );
-    return { getProblemTypes, enFlagshipTypes };
+    const { SEO_LEVELS, getLevelPath } =
+      await server.ssrLoadModule("/src/seoRoutes.ts");
+    return { getProblemTypes, enFlagshipTypes, SEO_LEVELS, getLevelPath };
   } finally {
     await server.close();
   }
 }
 
 async function main() {
-  const { getProblemTypes, enFlagshipTypes } = await loadRegistries();
+  const { getProblemTypes, enFlagshipTypes, SEO_LEVELS, getLevelPath } =
+    await loadRegistries();
 
   const paths = [
     "/",
     "/grade-select",
-    ...LEVELS.map(
-      (level) => `/content-select?level=${encodeURIComponent(level)}`,
-    ),
+    ...SEO_LEVELS.map(getLevelPath),
     "/en",
     ...enFlagshipTypes.map((type) => `/en/worksheets/${type.slug}`),
     ...getProblemTypes().map((type) => `/problems/${type.id}`),

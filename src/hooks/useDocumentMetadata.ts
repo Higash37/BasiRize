@@ -18,6 +18,11 @@ type Breadcrumb = {
   path: string;
 };
 
+type FaqItem = {
+  question: string;
+  answer: string;
+};
+
 type DocumentMetadata = {
   title: string;
   description: string;
@@ -25,6 +30,7 @@ type DocumentMetadata = {
   lang?: string;
   alternates?: LanguageAlternate[];
   breadcrumbs?: Breadcrumb[];
+  faq?: FaqItem[];
 };
 
 export function useDocumentMetadata(metadata?: DocumentMetadata): void {
@@ -34,6 +40,7 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
   const lang = metadata?.lang;
   const alternates = metadata?.alternates;
   const breadcrumbs = metadata?.breadcrumbs;
+  const faq = metadata?.faq;
 
   useEffect(() => {
     if (!title || !descriptionContent || !canonicalPath) {
@@ -93,6 +100,7 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
       ["og:url", canonicalUrl],
       ["og:type", "website"],
       ["og:site_name", "BasiRize"],
+      ["og:locale", lang === "en" ? "en_US" : "ja_JP"],
       ["og:image", OG_IMAGE_URL],
       ["og:image:alt", "BasiRizeのロゴ"],
       // ロゴ画像(正方形)なので、横長を想定するsummary_large_imageではなくsummaryにする
@@ -104,17 +112,44 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
     // prerenderで既に同じproperty値のタグがhead内にある場合があるため、
     // description/canonicalと同様に既存タグを再利用し重複させない
     const ogElements = ogTags.map(([property, content]) => {
-      const selector = `meta[property="${property}"]`;
+      const attribute = property.startsWith("twitter:") ? "name" : "property";
+      const selector = `meta[${attribute}="${property}"]`;
       const existingOg = document.head.querySelector<HTMLMetaElement>(selector);
-      const element = existingOg ?? (() => {
-        const created = document.createElement("meta");
-        created.setAttribute("property", property);
-        document.head.append(created);
-        return created;
-      })();
+      const element =
+        existingOg ??
+        (() => {
+          const created = document.createElement("meta");
+          created.setAttribute(attribute, property);
+          document.head.append(created);
+          return created;
+        })();
       const previousContent = existingOg?.getAttribute("content") ?? null;
       element.setAttribute("content", content);
       return { element, existed: existingOg !== null, previousContent };
+    });
+
+    const webPageScript = getOrCreateElement<HTMLScriptElement>(
+      'script[data-schema="web-page"]',
+      () => {
+        const created = document.createElement("script");
+        created.type = "application/ld+json";
+        created.dataset.schema = "web-page";
+        document.head.append(created);
+        return created;
+      },
+    );
+    webPageScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description: descriptionContent,
+      url: canonicalUrl,
+      inLanguage: lang === "en" ? "en" : "ja",
+      isPartOf: {
+        "@type": "WebSite",
+        name: "BasiRize",
+        url: PRODUCTION_ORIGIN,
+      },
     });
 
     // パンくずをGoogleにも伝え、検索結果でのページ位置表示に使ってもらう
@@ -145,6 +180,35 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
         })()
       : undefined;
 
+    // FAQセクションがあるページでは、検索結果にQ&Aがそのまま出る可能性があるFAQPageも伝える
+    const faqScript = faq?.length
+      ? (() => {
+          const element = getOrCreateElement<HTMLScriptElement>(
+            'script[data-schema="faq-page"]',
+            () => {
+              const created = document.createElement("script");
+              created.type = "application/ld+json";
+              created.dataset.schema = "faq-page";
+              document.head.append(created);
+              return created;
+            },
+          );
+          element.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faq.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: answer,
+              },
+            })),
+          });
+          return element;
+        })()
+      : undefined;
+
     return () => {
       document.title = previousTitle;
       document.documentElement.lang = previousLang;
@@ -168,9 +232,19 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
         }
       }
 
+      webPageScript.remove();
       breadcrumbScript?.remove();
+      faqScript?.remove();
     };
-  }, [canonicalPath, descriptionContent, title, lang, alternates, breadcrumbs]);
+  }, [
+    canonicalPath,
+    descriptionContent,
+    title,
+    lang,
+    alternates,
+    breadcrumbs,
+    faq,
+  ]);
 }
 
 function getOrCreateElement<T extends Element>(
