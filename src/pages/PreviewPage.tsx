@@ -17,7 +17,6 @@ import PrintableProblemList from "../components/PrintableProblemList";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
 import { useNoIndex } from "../hooks/useNoIndex";
-import { useScrolled } from "../hooks/useScrolled";
 
 // URLから来た文字列を正の整数に直す。おかしければ既定値を返す
 function toPositiveInt(value: string | null, fallback: number): number {
@@ -36,8 +35,6 @@ function splitIntoPages(problems: Problem[], perPage: number): Problem[][] {
 
 function PreviewPage() {
   const [searchParams] = useSearchParams();
-  // フロー表示と同じく、スクロール中は薄く・押せない状態にする
-  const scrolled = useScrolled();
   // はみ出している紙のidを集めたもの。1枚でもあれば印刷ボタンを押せなくする
   // （window.alert()で毎回警告すると、連打でブラウザに無視されるようになるため）
   const [overflowingSheetIds, setOverflowingSheetIds] = useState<Set<string>>(
@@ -144,13 +141,7 @@ function PreviewPage() {
           problemType={{ id: problemType.id, title: problemType.title }}
         />
 
-        <div
-          className={
-            scrolled
-              ? "preview-toolbar preview-toolbar-scrolled"
-              : "preview-toolbar"
-          }
-        >
+        <div className="preview-toolbar">
           <Link
             to="/grade-select"
             className="preview-back"
@@ -161,6 +152,7 @@ function PreviewPage() {
 
           <button
             className="preview-print"
+            aria-describedby="preview-print-help"
             disabled={overflowingSheetIds.size > 0}
             onClick={() => {
               trackPrintClicked({
@@ -176,6 +168,10 @@ function PreviewPage() {
             印刷 / PDF保存
           </button>
         </div>
+
+        <p id="preview-print-help" className="preview-print-help">
+          印刷画面が開かない場合は、SafariまたはChromeで開いてください。
+        </p>
 
         {overflowingSheetIds.size > 0 && (
           <p className="preview-overflow-warning" role="alert">
