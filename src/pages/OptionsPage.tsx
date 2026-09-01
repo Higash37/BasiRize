@@ -12,6 +12,7 @@ import { enFlagshipTypes } from "../data/enFlagshipTypes";
 import { trackOptionsSubmitted } from "../analytics";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
+import { getLevelPath } from "../seoRoutes";
 // CSSスタイル
 import "./OptionsPage.css";
 
@@ -60,6 +61,7 @@ function OptionsPage() {
           canonicalPath: `/problems/${problemType.id}`,
           alternates: enFlagship
             ? [
+                { hreflang: "ja", path: `/problems/${problemType.id}` },
                 {
                   hreflang: "en",
                   path: `/en/worksheets/${enFlagship.slug}`,
@@ -70,7 +72,7 @@ function OptionsPage() {
             { name: "数学", path: "/" },
             {
               name: problemType.level,
-              path: `/content-select?level=${problemType.level}`,
+              path: getLevelPath(problemType.level),
             },
             { name: problemType.title, path: `/problems/${problemType.id}` },
           ],

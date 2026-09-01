@@ -1,9 +1,9 @@
-// ビルド後、各URLに対応するtitle/description/canonical/hreflang/OGP/パンくずJSON-LDを
+// ビルド後、各URLに対応するhead情報と検索エンジンが読める本文を
 // dist/index.htmlのテンプレートに文字列として埋め込み、dist/内に書き出す。
 // 本物のブラウザは使わない（Renderのビルド環境はapt-get等でシステムライブラリを
 // 追加できず、ヘッドレスChromiumの起動に必要な共有ライブラリが揃わなかったため）。
-// ページ本文まではここでは描画しない。狙いはクローラー向けの<head>タグの充実であり、
-// 本文はこれまで通りクライアント側のReactが描画する。
+// React本体はブラウザ起動後にcreateRootで描画し直す。ここで入れる本文は、JavaScriptを
+// 実行しないクローラーにもページ固有の見出し・説明・内部リンクを渡すためのもの。
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -19,6 +19,31 @@ const PRODUCTION_ORIGIN = "https://basirise.com";
 
 // useDocumentMetadata.tsと同じ値
 const OG_IMAGE_URL = new URL("/basirize-favicon.png", PRODUCTION_ORIGIN).href;
+
+// HomePage.tsxのHOME_FAQと同じ内容
+const HOME_FAQ = [
+  {
+    question: "無料で使えますか？",
+    answer: "はい。会員登録なしで、無料でお使いいただけます。",
+  },
+  {
+    question: "塾の授業や宿題で配布してもいいですか？",
+    answer: "はい。生成したプリントは印刷して、授業や宿題としてお使いいただけます。",
+  },
+  {
+    question: "同じ問題が続けて出ないようにできますか？",
+    answer: "生成のたびに数値をランダムに変えているので、毎回ちがう問題になります。",
+  },
+  {
+    question: "印刷以外にPDFで保存できますか？",
+    answer: "はい。プレビュー画面の印刷から、PDFとして保存できます。",
+  },
+  {
+    question: "対応している学年を教えてください",
+    answer:
+      "小学校・中学校・高校の算数・数学に対応しています。学年ごとの単元は上の一覧からご確認いただけます。",
+  },
+];
 
 async function getPathsFromSitemap() {
   const sitemapPath = path.join(distDir, "sitemap.xml");
@@ -46,20 +71,26 @@ async function loadSeoData() {
   const enFlagshipTypes = await server.ssrLoadModule(
     "/src/data/enFlagshipTypes.ts",
   );
+  const seoRoutes = await server.ssrLoadModule("/src/seoRoutes.ts");
 
   await server.close();
-  return { registry, enFlagshipTypes };
+  return { registry, enFlagshipTypes, seoRoutes };
 }
 
 // 各ページのuseDocumentMetadata呼び出しと同じ内容をNode側で組み立てる
-function resolveMetadata(pathname, { registry, enFlagshipTypes }) {
+function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
   if (pathname === "/") {
     return {
       title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| BasiRize",
       description:
         "「あと5分で欲しい」に応える算数・数学プリント生成サイト。学年と単元を選ぶだけで、毎回新しい問題をランダム生成。小学校から高校まで対応、今すぐ印刷・PDF保存できます。",
       canonicalPath: "/",
-      alternates: [{ hreflang: "en", path: "/en" }],
+      alternates: [
+        { hreflang: "ja", path: "/" },
+        { hreflang: "en", path: "/en" },
+        { hreflang: "x-default", path: "/" },
+      ],
+      faq: HOME_FAQ,
     };
   }
 
@@ -72,6 +103,23 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes }) {
     };
   }
 
+  const levelMatch = pathname.match(/^\/math\/([^/]+)$/);
+  if (levelMatch) {
+    const level = seoRoutes.getLevelFromSlug(levelMatch[1]);
+    if (!level) {
+      return undefined;
+    }
+    return {
+      title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
+      description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
+      canonicalPath: seoRoutes.getLevelPath(level),
+      breadcrumbs: [
+        { name: "数学", path: "/" },
+        { name: level, path: seoRoutes.getLevelPath(level) },
+      ],
+    };
+  }
+
   if (pathname === "/en") {
     return {
       title: "Free Math Worksheet Generator | BasiRize",
@@ -79,7 +127,11 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes }) {
         "Generate free, printable math worksheets instantly. A fresh set of problems every time, from basic arithmetic to junior-high entrance-exam word problems.",
       canonicalPath: "/en",
       lang: "en",
-      alternates: [{ hreflang: "ja", path: "/" }],
+      alternates: [
+        { hreflang: "en", path: "/en" },
+        { hreflang: "ja", path: "/" },
+        { hreflang: "x-default", path: "/" },
+      ],
     };
   }
 
@@ -98,7 +150,13 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes }) {
       description: flagshipType.descriptionEn,
       canonicalPath: `/en/worksheets/${flagshipType.slug}`,
       lang: "en",
-      alternates: [{ hreflang: "ja", path: `/problems/${problemType.id}` }],
+      alternates: [
+        {
+          hreflang: "en",
+          path: `/en/worksheets/${flagshipType.slug}`,
+        },
+        { hreflang: "ja", path: `/problems/${problemType.id}` },
+      ],
       breadcrumbs: [
         { name: "BasiRize", path: "/en" },
         {
@@ -123,13 +181,16 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes }) {
       description: problemType.description,
       canonicalPath: `/problems/${problemType.id}`,
       alternates: enFlagship
-        ? [{ hreflang: "en", path: `/en/worksheets/${enFlagship.slug}` }]
+        ? [
+            { hreflang: "ja", path: `/problems/${problemType.id}` },
+            { hreflang: "en", path: `/en/worksheets/${enFlagship.slug}` },
+          ]
         : undefined,
       breadcrumbs: [
         { name: "数学", path: "/" },
         {
           name: problemType.level,
-          path: `/content-select?level=${problemType.level}`,
+          path: seoRoutes.getLevelPath(problemType.level),
         },
         { name: problemType.title, path: `/problems/${problemType.id}` },
       ],
@@ -151,7 +212,95 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-function injectMetadata(template, metadata) {
+function linkList(items) {
+  return `<ul>${items
+    .map(
+      ({ label, path }) =>
+        `<li><a href="${escapeHtml(path)}">${escapeHtml(label)}</a></li>`,
+    )
+    .join("")}</ul>`;
+}
+
+function faqHtml(items) {
+  return items
+    .map(
+      ({ question, answer }) =>
+        `<h2>${escapeHtml(question)}</h2><p>${escapeHtml(answer)}</p>`,
+    )
+    .join("");
+}
+
+// Reactを実行しない検索クローラーにも、ページごとに固有の本文と内部リンクを渡す。
+function renderStaticContent(pathname, seoData, metadata) {
+  const { registry, enFlagshipTypes, seoRoutes } = seoData;
+  let links = [];
+  let intro = metadata.description;
+
+  if (pathname === "/") {
+    links = [
+      ...seoRoutes.SEO_LEVELS.map((level) => ({
+        label: `${level}の算数・数学プリント`,
+        path: seoRoutes.getLevelPath(level),
+      })),
+      { label: "Free Math Worksheets (English)", path: "/en" },
+    ];
+  } else if (pathname === "/grade-select") {
+    links = seoRoutes.SEO_LEVELS.map((level) => ({
+      label: level,
+      path: seoRoutes.getLevelPath(level),
+    }));
+  } else if (pathname === "/en") {
+    links = enFlagshipTypes.enFlagshipTypes.map((type) => ({
+      label: type.titleEn,
+      path: `/en/worksheets/${type.slug}`,
+    }));
+  } else {
+    const levelMatch = pathname.match(/^\/math\/([^/]+)$/);
+    const level = levelMatch
+      ? seoRoutes.getLevelFromSlug(levelMatch[1])
+      : undefined;
+    if (level) {
+      links = registry.getProblemTypes(level).map((type) => ({
+        label: `${type.grade} ${type.title}`,
+        path: `/problems/${type.id}`,
+      }));
+    }
+
+    const problemMatch = pathname.match(/^\/problems\/([^/]+)$/);
+    const problemType = problemMatch
+      ? registry.getProblemTypeById(problemMatch[1])
+      : undefined;
+    if (problemType) {
+      intro = `${problemType.description} 学年と単元に合った問題を毎回新しく生成し、解答付きで印刷・PDF保存できます。`;
+      links = [
+        {
+          label: `${problemType.level}の問題プリント一覧`,
+          path: seoRoutes.getLevelPath(problemType.level),
+        },
+      ];
+    }
+
+    const worksheetMatch = pathname.match(/^\/en\/worksheets\/([^/]+)$/);
+    const worksheet = worksheetMatch
+      ? enFlagshipTypes.getEnFlagshipType(worksheetMatch[1])
+      : undefined;
+    if (worksheet) {
+      links = [
+        { label: "All free math worksheets", path: "/en" },
+        {
+          label: "Generate and print this worksheet",
+          path: `/problems/${worksheet.typeId}`,
+        },
+      ];
+    }
+  }
+
+  const heading = metadata.title.replace(/\s*\|\s*BasiRize$/, "");
+  const faqSection = pathname === "/" ? faqHtml(HOME_FAQ) : "";
+  return `<main data-prerendered-content><h1>${escapeHtml(heading)}</h1><p>${escapeHtml(intro)}</p>${linkList(links)}${faqSection}</main>`;
+}
+
+function injectMetadata(template, metadata, staticContent) {
   let html = template;
 
   html = html.replace(
@@ -165,7 +314,10 @@ function injectMetadata(template, metadata) {
   );
 
   if (metadata.lang) {
-    html = html.replace(/<html lang="[^"]*">/, `<html lang="${metadata.lang}">`);
+    html = html.replace(
+      /<html lang="[^"]*">/,
+      `<html lang="${metadata.lang}">`,
+    );
   }
 
   const canonicalUrl = absoluteUrl(metadata.canonicalPath);
@@ -183,6 +335,7 @@ function injectMetadata(template, metadata) {
     ["og:url", canonicalUrl],
     ["og:type", "website"],
     ["og:site_name", "BasiRize"],
+    ["og:locale", metadata.lang === "en" ? "en_US" : "ja_JP"],
     ["og:image", OG_IMAGE_URL],
     ["og:image:alt", "BasiRizeのロゴ"],
     ["twitter:card", "summary"],
@@ -191,28 +344,70 @@ function injectMetadata(template, metadata) {
     ["twitter:image", OG_IMAGE_URL],
   ];
   for (const [property, content] of ogTags) {
+    const attribute = property.startsWith("twitter:") ? "name" : "property";
     extraTags.push(
-      `<meta property="${property}" content="${escapeHtml(content)}" />`,
+      `<meta ${attribute}="${property}" content="${escapeHtml(content)}" />`,
     );
   }
+
+  const webPageJson = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: metadata.title,
+    description: metadata.description,
+    url: canonicalUrl,
+    inLanguage: metadata.lang === "en" ? "en" : "ja",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "BasiRize",
+      url: PRODUCTION_ORIGIN,
+    },
+  });
+  extraTags.push(
+    `<script type="application/ld+json" data-schema="web-page">${webPageJson}</script>`,
+  );
 
   if (metadata.breadcrumbs?.length) {
     const json = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      itemListElement: metadata.breadcrumbs.map(({ name, path: itemPath }, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name,
-        item: absoluteUrl(itemPath),
-      })),
+      itemListElement: metadata.breadcrumbs.map(
+        ({ name, path: itemPath }, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name,
+          item: absoluteUrl(itemPath),
+        }),
+      ),
     });
     extraTags.push(
       `<script type="application/ld+json" data-schema="breadcrumb-list">${json}</script>`,
     );
   }
 
+  if (metadata.faq?.length) {
+    const json = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: metadata.faq.map(({ question, answer }) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: answer,
+        },
+      })),
+    });
+    extraTags.push(
+      `<script type="application/ld+json" data-schema="faq-page">${json}</script>`,
+    );
+  }
+
   html = html.replace("</head>", `${extraTags.join("\n    ")}\n  </head>`);
+  html = html.replace(
+    '<div id="root"></div>',
+    `<div id="root">${staticContent}</div>`,
+  );
 
   return html;
 }
@@ -232,7 +427,8 @@ async function main() {
       continue;
     }
 
-    const html = injectMetadata(template, metadata);
+    const staticContent = renderStaticContent(pathname, seoData, metadata);
+    const html = injectMetadata(template, metadata, staticContent);
     const outFile =
       pathname === "/"
         ? path.join(distDir, "index.html")

@@ -3,6 +3,7 @@ import SubjectCard from "../components/SubjectCard";
 import FlowStepper from "../components/FlowStepper";
 import { gradeCardImages } from "../data/cardImages.ts";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import { getLevelPath } from "../seoRoutes";
 
 function GradeSelectionPage() {
   const navigate = useNavigate();
@@ -26,17 +27,17 @@ function GradeSelectionPage() {
       <div className="subject-grid">
         <SubjectCard
           title="小学校"
-          onClick={() => navigate("/content-select?level=小学校")}
+          onClick={() => navigate(getLevelPath("小学校"))}
           imageSrc={gradeCardImages.elementary}
         />
         <SubjectCard
           title="中学校"
-          onClick={() => navigate("/content-select?level=中学校")}
+          onClick={() => navigate(getLevelPath("中学校"))}
           imageSrc={gradeCardImages.juniorHigh}
         />
         <SubjectCard
           title="高校"
-          onClick={() => navigate("/content-select?level=高校")}
+          onClick={() => navigate(getLevelPath("高校"))}
           imageSrc={gradeCardImages.highSchool}
         />
         <SubjectCard

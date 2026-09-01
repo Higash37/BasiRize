@@ -10,7 +10,11 @@ function EnHomePage() {
       "Generate free, printable math worksheets instantly. A fresh set of problems every time, from basic arithmetic to junior-high entrance-exam word problems.",
     canonicalPath: "/en",
     lang: "en",
-    alternates: [{ hreflang: "ja", path: "/" }],
+    alternates: [
+      { hreflang: "en", path: "/en" },
+      { hreflang: "ja", path: "/" },
+      { hreflang: "x-default", path: "/" },
+    ],
   });
 
   return (
@@ -18,8 +22,8 @@ function EnHomePage() {
       <div className="page-intro">
         <h1>Free Math Worksheet Generator</h1>
         <p>
-          Pick a worksheet below to generate a fresh, printable set of
-          problems with an answer key — in seconds.
+          Pick a worksheet below to generate a fresh, printable set of problems
+          with an answer key — in seconds.
         </p>
       </div>
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaCalculator, FaSchool, FaSlidersH, FaEye } from "react-icons/fa";
 import type { Level } from "../problem-generation";
 import { useScrolled } from "../hooks/useScrolled";
+import { getLevelPath } from "../seoRoutes";
 import "./FlowStepper.css";
 
 type StepKey = "subject" | "level" | "options" | "preview";
@@ -36,9 +37,8 @@ function FlowStepper({ current, level, problemType }: FlowStepperProps) {
       key: "level",
       icon: <FaSchool aria-hidden="true" />,
       label: level ?? "学年",
-      href: level ? `/content-select?level=${level}` : undefined,
-      state:
-        current === "level" ? "current" : level ? "done" : "upcoming",
+      href: level ? getLevelPath(level) : undefined,
+      state: current === "level" ? "current" : level ? "done" : "upcoming",
     },
     {
       key: "options",
@@ -46,7 +46,11 @@ function FlowStepper({ current, level, problemType }: FlowStepperProps) {
       label: "設定",
       href: problemType ? `/problems/${problemType.id}` : undefined,
       state:
-        current === "options" ? "current" : current === "preview" ? "done" : "upcoming",
+        current === "options"
+          ? "current"
+          : current === "preview"
+            ? "done"
+            : "upcoming",
     },
     {
       key: "preview",

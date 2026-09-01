@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ProblemTypeCard from "../components/ProblemTypeCard";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
@@ -8,11 +8,14 @@ import {
   type ProblemTypeSummary,
 } from "../problem-generation";
 import { useDocumentMetadata } from "../hooks/useDocumentMetadata";
+import { getLevelFromSlug, getLevelPath } from "../seoRoutes";
 import "./ContentSelectionPage.css";
 
 function ContentSelectionPage() {
   const [searchParams] = useSearchParams();
-  const level = searchParams.get("level");
+  const { levelSlug } = useParams();
+  // /content-select?level=... は既存URLとの互換用。正規URLは /math/:levelSlug。
+  const level = getLevelFromSlug(levelSlug) ?? searchParams.get("level");
   const types = level ? getProblemTypes(level) : [];
 
   useDocumentMetadata(
@@ -20,10 +23,10 @@ function ContentSelectionPage() {
       ? {
           title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
           description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
-          canonicalPath: `/content-select?level=${level}`,
+          canonicalPath: getLevelPath(level as Level),
           breadcrumbs: [
             { name: "数学", path: "/" },
-            { name: level, path: `/content-select?level=${level}` },
+            { name: level, path: getLevelPath(level as Level) },
           ],
         }
       : undefined,

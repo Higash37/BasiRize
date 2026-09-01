@@ -38,4 +38,23 @@
     display: block;
     overflow: visible;
   }
+
+  /*
+    HeaderとFooterには印刷時に隠す指定が元々なく、紙にそのまま乗っていた。
+    その高さぶん.sheet(印刷時257mm固定)が下へ押し出され、1枚に収まる
+    はずの内容が2枚目にはみ出して空白ページができていた
+  */
+  .site-header,
+  .site-footer {
+    display: none;
+  }
+
+  /*
+    .sheetの257mmは「@pageのmargin(20mm×上下)を除いた印字可能な高さ」ちょうどで
+    計算していて余裕がない。.site-mainのpaddingが残っていると、それだけで
+    257mmからはみ出して次ページに空白ができてしまうため、印刷時は0にする
+  */
+  .site-main {
+    padding: 0;
+  }
 }

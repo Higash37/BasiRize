@@ -8,9 +8,7 @@ import Layout from "./components/Layout";
 // （Suspenseの受け皿はLayout.tsxの<Outlet />側に用意している）
 const HomePage = lazy(() => import("./pages/HomePage"));
 const GradeSelectionPage = lazy(() => import("./pages/GradeSelectionPage"));
-const ContentSelectionPage = lazy(
-  () => import("./pages/ContentSelectionPage"),
-);
+const ContentSelectionPage = lazy(() => import("./pages/ContentSelectionPage"));
 const OptionsPage = lazy(() => import("./pages/OptionsPage"));
 const PreviewPage = lazy(() => import("./pages/PreviewPage"));
 const EnHomePage = lazy(() => import("./pages/EnHomePage"));
@@ -25,6 +23,8 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/grade-select" element={<GradeSelectionPage />} />
+        <Route path="/math/:levelSlug" element={<ContentSelectionPage />} />
+        {/* 既存のブックマークとの互換用。SEO上は/math/:levelSlugを正規URLにする */}
         <Route path="/content-select" element={<ContentSelectionPage />} />
         <Route path="/problems/:typeId" element={<OptionsPage />} />
         <Route path="/options" element={<OptionsPage />} />
