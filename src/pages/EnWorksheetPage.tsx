@@ -17,7 +17,7 @@ function EnWorksheetPage() {
   useDocumentMetadata(
     flagshipType && problemType
       ? {
-          title: `${flagshipType.titleEn} | BasiRize`,
+          title: `${flagshipType.titleEn} | Math² Drill`,
           description: flagshipType.descriptionEn,
           canonicalPath: `/en/worksheets/${flagshipType.slug}`,
           lang: "en",
@@ -29,7 +29,7 @@ function EnWorksheetPage() {
             { hreflang: "ja", path: `/problems/${problemType.id}` },
           ],
           breadcrumbs: [
-            { name: "BasiRize", path: "/en" },
+            { name: "Math² Drill", path: "/en" },
             {
               name: flagshipType.titleEn,
               path: `/en/worksheets/${flagshipType.slug}`,

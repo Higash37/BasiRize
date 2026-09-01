@@ -81,7 +81,7 @@ async function loadSeoData() {
 function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
   if (pathname === "/") {
     return {
-      title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| BasiRize",
+      title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| math²ドリル",
       description:
         "「あと5分で欲しい」に応える算数・数学プリント生成サイト。学年と単元を選ぶだけで、毎回新しい問題をランダム生成。小学校から高校まで対応、今すぐ印刷・PDF保存できます。",
       canonicalPath: "/",
@@ -96,7 +96,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
 
   if (pathname === "/grade-select") {
     return {
-      title: "学年を選んで算数・数学の問題プリントを作成 | BasiRize",
+      title: "学年を選んで算数・数学の問題プリントを作成 | math²ドリル",
       description:
         "小学校・中学校・高校から学年区分を選び、条件に合った算数・数学の問題プリントをすぐに作成できます。",
       canonicalPath: "/grade-select",
@@ -110,7 +110,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
       return undefined;
     }
     return {
-      title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
+      title: `${level}の算数・数学 問題プリント一覧 | math²ドリル`,
       description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
       canonicalPath: seoRoutes.getLevelPath(level),
       breadcrumbs: [
@@ -122,7 +122,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
 
   if (pathname === "/en") {
     return {
-      title: "Free Math Worksheet Generator | BasiRize",
+      title: "Free Math Worksheet Generator | Math² Drill",
       description:
         "Generate free, printable math worksheets instantly. A fresh set of problems every time, from basic arithmetic to junior-high entrance-exam word problems.",
       canonicalPath: "/en",
@@ -146,7 +146,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
       return undefined;
     }
     return {
-      title: `${flagshipType.titleEn} | BasiRize`,
+      title: `${flagshipType.titleEn} | Math² Drill`,
       description: flagshipType.descriptionEn,
       canonicalPath: `/en/worksheets/${flagshipType.slug}`,
       lang: "en",
@@ -158,7 +158,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
         { hreflang: "ja", path: `/problems/${problemType.id}` },
       ],
       breadcrumbs: [
-        { name: "BasiRize", path: "/en" },
+        { name: "Math² Drill", path: "/en" },
         {
           name: flagshipType.titleEn,
           path: `/en/worksheets/${flagshipType.slug}`,
@@ -177,7 +177,7 @@ function resolveMetadata(pathname, { registry, enFlagshipTypes, seoRoutes }) {
       (type) => type.typeId === problemType.id,
     );
     return {
-      title: `${problemType.grade}・${problemType.title}の無料問題プリント | BasiRize`,
+      title: `${problemType.grade}・${problemType.title}の無料問題プリント | math²ドリル`,
       description: problemType.description,
       canonicalPath: `/problems/${problemType.id}`,
       alternates: enFlagship
@@ -295,7 +295,7 @@ function renderStaticContent(pathname, seoData, metadata) {
     }
   }
 
-  const heading = metadata.title.replace(/\s*\|\s*BasiRize$/, "");
+  const heading = metadata.title.replace(/\s*\|\s*(math²ドリル|Math² Drill)$/, "");
   const faqSection = pathname === "/" ? faqHtml(HOME_FAQ) : "";
   return `<main data-prerendered-content><h1>${escapeHtml(heading)}</h1><p>${escapeHtml(intro)}</p>${linkList(links)}${faqSection}</main>`;
 }
@@ -334,10 +334,10 @@ function injectMetadata(template, metadata, staticContent) {
     ["og:description", metadata.description],
     ["og:url", canonicalUrl],
     ["og:type", "website"],
-    ["og:site_name", "BasiRize"],
+    ["og:site_name", "math²ドリル"],
     ["og:locale", metadata.lang === "en" ? "en_US" : "ja_JP"],
     ["og:image", OG_IMAGE_URL],
-    ["og:image:alt", "BasiRizeのロゴ"],
+    ["og:image:alt", "math²ドリルのロゴ"],
     ["twitter:card", "summary"],
     ["twitter:title", metadata.title],
     ["twitter:description", metadata.description],
@@ -359,7 +359,7 @@ function injectMetadata(template, metadata, staticContent) {
     inLanguage: metadata.lang === "en" ? "en" : "ja",
     isPartOf: {
       "@type": "WebSite",
-      name: "BasiRize",
+      name: "math²ドリル",
       url: PRODUCTION_ORIGIN,
     },
   });

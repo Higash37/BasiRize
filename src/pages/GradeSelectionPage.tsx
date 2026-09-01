@@ -9,7 +9,7 @@ function GradeSelectionPage() {
   const navigate = useNavigate();
 
   useDocumentMetadata({
-    title: "学年を選んで算数・数学の問題プリントを作成 | BasiRize",
+    title: "学年を選んで算数・数学の問題プリントを作成 | math²ドリル",
     description:
       "小学校・中学校・高校から学年区分を選び、条件に合った算数・数学の問題プリントをすぐに作成できます。",
     canonicalPath: "/grade-select",

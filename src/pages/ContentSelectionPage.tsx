@@ -21,7 +21,7 @@ function ContentSelectionPage() {
   useDocumentMetadata(
     level && types.length > 0
       ? {
-          title: `${level}の算数・数学 問題プリント一覧 | BasiRize`,
+          title: `${level}の算数・数学 問題プリント一覧 | math²ドリル`,
           description: `${level}向けの算数・数学の問題プリントを単元ごとに選んで作成できます。`,
           canonicalPath: getLevelPath(level as Level),
           breadcrumbs: [

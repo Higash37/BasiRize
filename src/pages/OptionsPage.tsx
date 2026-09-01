@@ -56,7 +56,7 @@ function OptionsPage() {
           // 学年をタイトルタグの先頭に含める。表示上のh1やカードの見出しは
           // problemType.titleのままで変えず、検索結果に出るtitleタグだけを
           // 学年つきにして区別する（同じ単元名を複数学年で使う場合の重複防止）
-          title: `${problemType.grade}・${problemType.title}の無料問題プリント | BasiRize`,
+          title: `${problemType.grade}・${problemType.title}の無料問題プリント | math²ドリル`,
           description: problemType.description,
           canonicalPath: `/problems/${problemType.id}`,
           alternates: enFlagship

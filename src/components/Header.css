@@ -29,9 +29,16 @@
   color: var(--color-text-muted);
 }
 
-/* 幅が狭いと窮屈になるため、キャッチフレーズはスマホ幅では隠す */
+.site-header-reading {
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* 幅が狭いと窮屈になるため、キャッチフレーズと読み方はスマホ幅では隠す */
 @media (max-width: 600px) {
-  .site-header-tagline {
+  .site-header-tagline,
+  .site-header-reading {
     display: none;
   }
 }
