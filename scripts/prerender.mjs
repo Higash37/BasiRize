@@ -23,6 +23,11 @@ const OG_IMAGE_URL = new URL("/basirize-favicon.png", PRODUCTION_ORIGIN).href;
 // HomePage.tsxのHOME_FAQと同じ内容
 const HOME_FAQ = [
   {
+    question: "「math²ドリル」の読み方は？",
+    answer:
+      "「マスマスドリル」（ますますどりる）と読みます。「ますますドリル」「mathmathドリル」といった表記でも検索いただけます。",
+  },
+  {
     question: "無料で使えますか？",
     answer: "はい。会員登録なしで、無料でお使いいただけます。",
   },
