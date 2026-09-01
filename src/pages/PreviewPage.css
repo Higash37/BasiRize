@@ -1,6 +1,5 @@
 /* ── 画面用の道具 ────────────────────────── */
-/* 印刷ボタン・戻るボタンは、FlowStepperと1枚目の用紙の間に置く。
-   スクロール中はFlowStepperと同様に薄く・押せない状態にする */
+/* 印刷ボタン・戻るボタンは、FlowStepperと1枚目の用紙の間に置く */
 
 /*
   幅を紙(.sheet)と同じ210mmにそろえて中央寄せにすることで、
@@ -14,12 +13,16 @@
   width: 100%;
   max-width: 210mm;
   margin: 0 auto var(--space-4);
-  transition: opacity var(--transition);
 }
 
-.preview-toolbar-scrolled {
-  opacity: 0.4;
-  pointer-events: none;
+.preview-print-help {
+  display: none;
+  width: 100%;
+  max-width: 210mm;
+  margin: calc(var(--space-4) * -1) auto var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  text-align: right;
 }
 
 .preview-print {
@@ -91,6 +94,12 @@
 }
 
 @media screen and (max-width: 600px) {
+  .preview-print-help {
+    display: block;
+    padding: 0 var(--space-2);
+    text-align: center;
+  }
+
   .sheet-frame {
     width: calc(100vw - (var(--space-2) * 2));
     aspect-ratio: 210 / 297;
