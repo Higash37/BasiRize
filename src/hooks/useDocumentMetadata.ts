@@ -99,10 +99,10 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
       ["og:description", descriptionContent],
       ["og:url", canonicalUrl],
       ["og:type", "website"],
-      ["og:site_name", "BasiRize"],
+      ["og:site_name", "math²ドリル"],
       ["og:locale", lang === "en" ? "en_US" : "ja_JP"],
       ["og:image", OG_IMAGE_URL],
-      ["og:image:alt", "BasiRizeのロゴ"],
+      ["og:image:alt", "math²ドリルのロゴ"],
       // ロゴ画像(正方形)なので、横長を想定するsummary_large_imageではなくsummaryにする
       ["twitter:card", "summary"],
       ["twitter:title", title],
@@ -147,7 +147,7 @@ export function useDocumentMetadata(metadata?: DocumentMetadata): void {
       inLanguage: lang === "en" ? "en" : "ja",
       isPartOf: {
         "@type": "WebSite",
-        name: "BasiRize",
+        name: "math²ドリル",
         url: PRODUCTION_ORIGIN,
       },
     });

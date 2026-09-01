@@ -5,7 +5,7 @@ import "./EnHomePage.css";
 
 function EnHomePage() {
   useDocumentMetadata({
-    title: "Free Math Worksheet Generator | BasiRize",
+    title: "Free Math Worksheet Generator | Math² Drill",
     description:
       "Generate free, printable math worksheets instantly. A fresh set of problems every time, from basic arithmetic to junior-high entrance-exam word problems.",
     canonicalPath: "/en",

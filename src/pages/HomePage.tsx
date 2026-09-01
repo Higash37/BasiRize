@@ -183,7 +183,7 @@ function HomePage() {
 
   // index.htmlの既定値と同じ内容を、英語版へのhreflang付きで明示する
   useDocumentMetadata({
-    title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| BasiRize",
+    title: "算数・数学プリントを今すぐ自動生成【小学校〜高校】| math²ドリル",
     description:
       "「あと5分で欲しい」に応える算数・数学プリント生成サイト。学年と単元を選ぶだけで、毎回新しい問題をランダム生成。小学校から高校まで対応、今すぐ印刷・PDF保存できます。",
     canonicalPath: "/",
@@ -232,7 +232,7 @@ function HomePage() {
       </ul>
 
       <section className="home-section" aria-labelledby="home-features-heading">
-        <h2 id="home-features-heading">BasiRizeでできること</h2>
+        <h2 id="home-features-heading">math²ドリルでできること</h2>
         <ul className="home-feature-list">
           {HOME_FEATURES.map((feature) => (
             <li key={feature.title} className="home-feature-card">

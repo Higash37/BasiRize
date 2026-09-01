@@ -57,7 +57,7 @@
   padding: var(--space-6) var(--space-4);
 }
 
-/* BasiRizeでできること */
+/* math²ドリルでできること */
 .home-feature-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
