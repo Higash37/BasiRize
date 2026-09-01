@@ -192,15 +192,19 @@
 
 .sheet-problems {
   margin: 0;
-  padding-left: 1.5em;
   font-size: var(--problem-font-size, 30px);
   line-height: var(--problem-line-height, 2.6);
-  /* <ol>が作る番号を消して①というような表示にする */
-  list-style: none;
-  /* カウンターを作り、初期値へ戻すプロパティ。今回は問題番号を振るために実装 */
-  counter-reset: problem-number;
-  column-count: var(--problem-columns, 2);
+  display: grid;
+  grid-template-columns: repeat(var(--problem-columns, 2), minmax(0, 1fr));
   column-gap: 16mm;
+}
+
+.sheet-problems-column {
+  min-width: 0;
+  margin: 0;
+  padding-left: 1.5em;
+  /* 独自の丸数字を表示するため、olの標準マーカーは隠す */
+  list-style: none;
 }
 
 /* 1問が段や紙をまたいで分断されないようにする */
@@ -209,8 +213,6 @@
   break-inside: avoid;
   white-space: pre-line;
   overflow-wrap: anywhere;
-  /* 指定したカウンターを増やすプロパティ。liタグの要素ごとに1つ増える */
-  counter-increment: problem-number;
 }
 
 .sheet-problems-with-diagrams li {
@@ -223,9 +225,9 @@
   vertical-align: top;
 }
 
-/* ::beforeによる擬似要素content: counter(名前)でliタグ先頭に問題番号をつける */
+/* 列ごとにolが分かれても、data属性の通し番号を丸数字として表示する */
 .sheet-problems li::before {
-  content: counter(problem-number);
+  content: attr(data-problem-number);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -255,14 +257,8 @@
 
   .sheet {
     width: auto;
-    /*
-      heightをautoにすると、.sheet-problemsのcolumn-count(段組み)が
-      高さの基準を失い、ブラウザによっては段組みが崩れて1列になってしまう。
-      @pageのmargin(20mm × 上下)を差し引いた、紙1枚ぶんの印字可能な高さを
-      そのまま指定することで、画面プレビュー(height:297mm)と同じ基準で
-      段組みを計算させる
-    */
-    height: 257mm;
+    /* 列はDOMで明示しているため、印刷エンジン向けの固定高は不要 */
+    height: auto;
     max-width: none;
     min-height: auto;
     margin: 0;
@@ -270,6 +266,10 @@
     border: none;
     border-radius: 0;
     outline: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-after: page;
+    page-break-after: always;
   }
 
   /* 印刷ボタンは無効化してあるが、Ctrl+P等で直接印刷された場合に備えて
@@ -278,8 +278,9 @@
     display: none;
   }
 
-  /* 2枚目以降は必ず新しい紙から始める */
-  .sheet + .sheet {
-    break-before: page;
+  /* 最後に空白ページを作らない */
+  .sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
   }
 }
