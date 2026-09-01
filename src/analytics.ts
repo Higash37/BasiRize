@@ -33,6 +33,52 @@ export function initializeAnalytics() {
   window.gtag("config", MEASUREMENT_ID);
 }
 
+type SubjectSelectedParams = {
+  subject: string;
+};
+
+// ホーム画面で教科カードを押した瞬間。ここまでの各イベントは
+// この後の画面遷移が前提になっており、ファネルの起点が計測できていなかった
+export function trackSubjectSelected(params: SubjectSelectedParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "subject_selected", {
+    subject: params.subject,
+  });
+}
+
+type HomeFaqOpenedParams = {
+  question: string;
+};
+
+export function trackHomeFaqOpened(params: HomeFaqOpenedParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "home_faq_opened", {
+    question: params.question,
+  });
+}
+
+type HomeCoverageClickedParams = {
+  level: string;
+};
+
+// トップの「対応している学年・単元」セクションから学年ページへ移動したとき。
+// 教科カード経由(grade-select)とは別の入口として、どちらが使われているか区別する
+export function trackHomeCoverageClicked(params: HomeCoverageClickedParams) {
+  if (!import.meta.env.PROD || !MEASUREMENT_ID) {
+    return;
+  }
+
+  window.gtag?.("event", "home_coverage_clicked", {
+    level: params.level,
+  });
+}
+
 export function trackWorksheetGenerated() {
   if (!import.meta.env.PROD || !MEASUREMENT_ID) {
     return;
