@@ -27,7 +27,7 @@ export class LikeTermsGenerator extends ProblemGenerator {
       return {
         question:
           `${withVariable(first, "x")} ${operatorSymbol(operator)} ` +
-          `${withVariable(second, "x")} =`,
+          `${withVariable(second, "x")}\n=`,
         answer: withVariable(result, "x"),
       };
     }
@@ -101,7 +101,7 @@ export class LinearEquationGenerator extends ProblemGenerator {
     return {
       question:
         `${withVariable(coefficient, "x")}${signedTerm(constant, "")}` +
-        ` = ${rightSide} のとき、x = `,
+        ` = ${rightSide} のとき、\nx = `,
       answer: String(solution),
     };
   }
@@ -142,7 +142,7 @@ export class SimultaneousEquationGenerator extends ProblemGenerator {
       const second = `${withVariable(a2, "x")}${signedTerm(-b2, "y")} = ${c2}`;
 
       return {
-        question: `${first}, ${second} のとき、x =  y = `,
+        question: `${first}, ${second} のとき、\nx = \ny = `,
         answer: `x = ${x}, y = ${y}`,
       };
     }
@@ -172,7 +172,7 @@ export class QuadraticEquationGenerator extends ProblemGenerator {
           ? `x = ${first}`
           : `x = ${Math.min(first, second)}, ${Math.max(first, second)}`;
       return {
-        question: `${quadratic(-(first + second), first * second)} = 0 のとき、x = `,
+        question: `${quadratic(-(first + second), first * second)} = 0 のとき、\nx = `,
         answer,
       };
     }
@@ -208,7 +208,7 @@ export class SquareRootGenerator extends ProblemGenerator {
       return {
         question:
           `${withVariable(first, root)} ${operatorSymbol(operator)} ` +
-          `${withVariable(second, root)} = `,
+          `${withVariable(second, root)}\n= `,
         answer: withVariable(result, root),
       };
     }

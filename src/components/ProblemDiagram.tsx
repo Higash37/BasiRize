@@ -281,38 +281,42 @@ function TapeDiagram({
   );
 }
 
+// 実際の点の数(答えの手がかりになりうる)は描かず、｢…｣で続きを示す
+// 決まった見本だけを表示する。同じ間隔で並んでいるイメージだけを伝える
 function PointLineDiagram({
   diagram,
 }: {
   diagram: Extract<ProblemDiagramData, { kind: "point-line" }>;
 }) {
-  const visibleCount = Math.min(diagram.pointCount, 9);
-  const coordinates = Array.from(
-    { length: visibleCount },
-    (_, index) => 12 + (index * 96) / Math.max(1, visibleCount - 1),
-  );
-
   if (diagram.closed) {
+    const dotAngles = [0, 0.16, 0.32].map(
+      (turn) => turn * Math.PI * 2 - Math.PI / 2,
+    );
+    const ellipsisAngle = 0.62 * Math.PI * 2 - Math.PI / 2;
     return (
       <svg
         className="problem-diagram problem-point-line"
         viewBox="0 0 120 90"
         role="img"
-        aria-label="同じ間隔で点を置いた輪"
+        aria-label="同じ間隔で点を置いた輪（点の数は答えとは無関係です）"
       >
         <circle className="problem-point-path" cx="60" cy="43" r="32" />
-        {coordinates.map((_, index) => {
-          const angle = (index / visibleCount) * Math.PI * 2 - Math.PI / 2;
-          return (
-            <circle
-              key={index}
-              className="problem-point-dot"
-              cx={60 + Math.cos(angle) * 32}
-              cy={43 + Math.sin(angle) * 32}
-              r="3"
-            />
-          );
-        })}
+        {dotAngles.map((angle, index) => (
+          <circle
+            key={index}
+            className="problem-point-dot"
+            cx={60 + Math.cos(angle) * 32}
+            cy={43 + Math.sin(angle) * 32}
+            r="3"
+          />
+        ))}
+        <text
+          className="problem-point-ellipsis"
+          x={60 + Math.cos(ellipsisAngle) * 32}
+          y={43 + Math.sin(ellipsisAngle) * 32 + 3}
+        >
+          ⋯
+        </text>
         <text className="problem-point-label" x="60" y="86">
           間隔 {diagram.intervalLabel}
         </text>
@@ -325,18 +329,15 @@ function PointLineDiagram({
       className="problem-diagram problem-point-line"
       viewBox="0 0 120 58"
       role="img"
-      aria-label="同じ間隔で点を置いた直線"
+      aria-label="同じ間隔で点を置いた直線（点の数は答えとは無関係です）"
     >
       <line className="problem-point-path" x1="12" y1="25" x2="108" y2="25" />
-      {coordinates.map((x, index) => (
-        <circle
-          key={index}
-          className="problem-point-dot"
-          cx={x}
-          cy="25"
-          r="3"
-        />
-      ))}
+      <circle className="problem-point-dot" cx="12" cy="25" r="3" />
+      <circle className="problem-point-dot" cx="36" cy="25" r="3" />
+      <text className="problem-point-ellipsis" x="66" y="29">
+        ⋯
+      </text>
+      <circle className="problem-point-dot" cx="108" cy="25" r="3" />
       <text className="problem-point-label" x="60" y="51">
         間隔 {diagram.intervalLabel}
       </text>

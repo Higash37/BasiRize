@@ -124,9 +124,19 @@ describe("問題タイプ一覧", () => {
 
     for (const problem of problems) {
       expect(problem.diagram?.kind).toBe("point-line");
-      if (problem.diagram?.kind === "point-line") {
-        expect(problem.answer).toBe(`${problem.diagram.pointCount}本`);
+      if (problem.diagram?.kind !== "point-line") {
+        continue;
       }
+
+      const lengthMatch = problem.question.match(/(\d+)m/);
+      const intervalMatch = problem.question.match(/(\d+)mおきに/);
+      expect(lengthMatch).not.toBeNull();
+      expect(intervalMatch).not.toBeNull();
+      const length = Number(lengthMatch?.[1]);
+      const interval = Number(intervalMatch?.[1]);
+      const gaps = length / interval;
+      const expectedCount = problem.diagram.closed ? gaps : gaps + 1;
+      expect(problem.answer).toBe(`${expectedCount}本`);
     }
   });
 
@@ -203,6 +213,16 @@ describe("問題タイプ一覧", () => {
     expect(getProblemTypeById("e5-speed")?.recommendedQuestionsPerPage).toBe(
       10,
     );
+  });
+
+  it("答えの前で改行する方程式系は1ページ6問を推奨する", () => {
+    expect(
+      getProblemTypeById("j1-linear-equation")?.recommendedQuestionsPerPage,
+    ).toBe(6);
+    expect(
+      getProblemTypeById("j2-simultaneous-equations")
+        ?.recommendedQuestionsPerPage,
+    ).toBe(6);
   });
 
   it("小学4年生までの問題文は学習用のひらがな表記にする", () => {
