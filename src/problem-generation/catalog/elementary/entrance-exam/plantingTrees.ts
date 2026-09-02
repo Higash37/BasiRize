@@ -20,7 +20,6 @@ class PlantingTreesGenerator extends ProblemGenerator {
       answer: `${count}本`,
       diagram: {
         kind: "point-line",
-        pointCount: count,
         intervalLabel: `${interval}m`,
         closed,
       },

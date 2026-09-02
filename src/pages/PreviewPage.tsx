@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaExternalLinkAlt } from "react-icons/fa";
 import {
   generateProblems,
   getProblemTypeById,
@@ -17,6 +17,7 @@ import PrintableProblemList from "../components/PrintableProblemList";
 import ErrorPage from "../components/ErrorPage";
 import FlowStepper from "../components/FlowStepper";
 import { useNoIndex } from "../hooks/useNoIndex";
+import { detectInAppBrowser } from "./inAppBrowser";
 
 // URLから来た文字列を正の整数に直す。おかしければ既定値を返す
 function toPositiveInt(value: string | null, fallback: number): number {
@@ -35,6 +36,12 @@ function splitIntoPages(problems: Problem[], perPage: number): Problem[][] {
 
 function PreviewPage() {
   const [searchParams] = useSearchParams();
+  // LINEやYahoo! JAPANアプリなどのアプリ内ブラウザではwindow.print()が
+  // 動かないことが多いため、検出できたら外部ブラウザで開き直すよう案内する
+  const inAppBrowserName = useMemo(
+    () => detectInAppBrowser(navigator.userAgent),
+    [],
+  );
   // はみ出している紙のidを集めたもの。1枚でもあれば印刷ボタンを押せなくする
   // （window.alert()で毎回警告すると、連打でブラウザに無視されるようになるため）
   const [overflowingSheetIds, setOverflowingSheetIds] = useState<Set<string>>(
@@ -169,9 +176,21 @@ function PreviewPage() {
           </button>
         </div>
 
-        <p id="preview-print-help" className="preview-print-help">
-          印刷画面が開かない場合は、SafariまたはChromeで開いてください。
-        </p>
+        {inAppBrowserName ? (
+          <p
+            id="preview-print-help"
+            className="preview-in-app-warning"
+            role="status"
+          >
+            <FaExternalLinkAlt aria-hidden="true" />
+            {inAppBrowserName}
+            のアプリ内ブラウザで開いています。印刷するには、メニューから「外部ブラウザで開く」を選んでください。
+          </p>
+        ) : (
+          <p id="preview-print-help" className="preview-print-help">
+            印刷ボタンが反応しない場合は、別のブラウザ（SafariやChromeなど）で開いてください。
+          </p>
+        )}
 
         {overflowingSheetIds.size > 0 && (
           <p className="preview-overflow-warning" role="alert">

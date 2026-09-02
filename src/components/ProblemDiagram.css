@@ -149,6 +149,13 @@
   stroke-width: 1.5;
 }
 
+.problem-point-ellipsis {
+  fill: currentcolor;
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
 .problem-angle,
 .problem-rectangle {
   width: 55mm;

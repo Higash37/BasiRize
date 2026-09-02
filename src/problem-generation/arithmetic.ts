@@ -15,11 +15,19 @@ export type ArithmeticSetting = {
 
 export class ArithmeticGenerator extends ProblemGenerator {
   private readonly setting: ArithmeticSetting;
+  // 中学の正負の数など、式が長くなりやすい単元では「=」の前で改行して
+  // 答えを書く場所を確保する。小学校の単純な計算では改行しない
+  private readonly breakBeforeAnswer: boolean;
 
-  constructor(random: RandomSource, setting: ArithmeticSetting) {
+  constructor(
+    random: RandomSource,
+    setting: ArithmeticSetting,
+    breakBeforeAnswer = false,
+  ) {
     super(random);
     validateSetting(setting);
     this.setting = setting;
+    this.breakBeforeAnswer = breakBeforeAnswer;
   }
 
   protected generateProblem(): Problem {
@@ -29,7 +37,9 @@ export class ArithmeticGenerator extends ProblemGenerator {
     );
     const expression = this.randomExpression(termCount);
     return {
-      question: `${expression.text()} = `,
+      question: this.breakBeforeAnswer
+        ? `${expression.text()}\n= `
+        : `${expression.text()} = `,
       answer: String(expression.value()),
     };
   }

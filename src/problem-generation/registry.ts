@@ -116,7 +116,7 @@ const problemTypes: readonly ProblemType[] = [
     "中学校",
     "中1",
     "正負の数の計算",
-    new ArithmeticGenerator(random, juniorHigh1SignedNumbers),
+    new ArithmeticGenerator(random, juniorHigh1SignedNumbers, true),
   ),
   createProblemType(
     "j1-like-terms",
@@ -269,8 +269,23 @@ const compactWorksheetIds = new Set([
   "exam-clock",
 ]);
 
+// 答えを書く前で改行する方程式系は1問が2〜3行になるため、
+// 図ありタイプと同じ少なめの問題数にする
+const multiLineWorksheetIds = new Set([
+  "j1-signed-numbers",
+  "j1-like-terms",
+  "j1-linear-equation",
+  "j2-simultaneous-equations",
+  "j3-quadratic-equation",
+  "j3-square-root",
+  "h1-quadratic-equation-advanced",
+]);
+
 function getRecommendedQuestionsPerPage(type: ProblemType): number {
-  return compactWorksheetIds.has(type.id) ? 6 : 10;
+  if (compactWorksheetIds.has(type.id) || multiLineWorksheetIds.has(type.id)) {
+    return 6;
+  }
+  return 10;
 }
 
 function isLowerElementary(type: ProblemType): boolean {

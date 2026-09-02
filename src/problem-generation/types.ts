@@ -36,7 +36,6 @@ export type ProblemDiagram =
     }
   | {
       kind: "point-line";
-      pointCount: number;
       intervalLabel: string;
       closed: boolean;
     }
