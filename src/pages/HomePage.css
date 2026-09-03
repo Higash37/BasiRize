@@ -1,44 +1,28 @@
-/* 数学カード1枚だけなので、共通のsubject-grid(5列)は使わずカード幅だけ確保する */
+/* 数学カードが「押すところ」だと一目でわかるよう、他の説明ボックスとは違う
+   色つきの帯で囲み、他の白いカード群から浮かせる */
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  background: color-mix(in srgb, var(--subject-math) 6%, white);
+  border: 1px solid color-mix(in srgb, var(--subject-math) 20%, white);
+  border-radius: var(--radius);
+}
+
+.home-hero .page-intro {
+  margin-bottom: 0;
+  max-width: 480px;
+}
+
+/* 数学カード1枚だけなので、共通のsubject-grid(5列)は使わずカード幅だけ確保する。
+   説明ボックスより一回り大きくして、押す場所であることを強調する */
 .home-subject-single {
-  max-width: 200px;
-}
-
-.home-more-subjects-note {
-  margin: var(--space-4) 0 var(--space-2);
-  color: var(--color-text-muted);
-}
-
-.home-more-subjects-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.home-more-subjects-chip {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1);
-  padding-right: var(--space-3);
-  background: var(--color-muted);
-  border-radius: 999px;
-  color: var(--color-text-muted);
-  font-weight: 700;
-}
-
-.home-more-subjects-icon {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  color: var(--color-surface);
-  font-size: 0.875rem;
+  width: 100%;
+  max-width: 240px;
 }
 
 .home-section {
@@ -57,22 +41,19 @@
   padding: var(--space-6) var(--space-4);
 }
 
-/* math²ドリルでできること */
+/* math²ドリルでできること。数学カードのような「押せる白い箱」に見えないよう、
+   枠や影は付けずアイコンと文章だけで並べる */
 .home-feature-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-6) var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .home-feature-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  box-shadow: var(--shadow-1);
+  padding: 0;
 }
 
 .home-feature-icon {
@@ -201,30 +182,32 @@
   color: var(--color-text-muted);
 }
 
-/* 対応している学年・単元 */
+/* 対応している学年・単元。数学カードと同じ画像+白い箱の見た目にすると
+   紛らわしいので、画像は小さく添えるだけにして箱・影は付けない */
 .home-coverage-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-6) var(--space-4);
   margin: 0;
 }
 
 .home-coverage-item {
-  overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .home-coverage-image {
   display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .home-coverage-body {
-  padding: var(--space-4);
+  min-width: 0;
 }
 
 .home-coverage-item h3 {
