@@ -4,11 +4,6 @@ import {
   FaRandom,
   FaPrint,
   FaGift,
-  FaLanguage,
-  FaBook,
-  FaFlask,
-  FaLandmark,
-  FaRobot,
   FaBolt,
   FaLayerGroup,
   FaClipboardList,
@@ -35,36 +30,6 @@ const LEVEL_IMAGES: Record<Level, string> = {
   中学校: gradeCardImages.juniorHigh,
   高校: gradeCardImages.highSchool,
 };
-
-// 数学以外は準備中。大きな箱を6枚並べると使えない機能が目立つので、
-// アイコン付きの小さなチップで「対応予定」だけ軽く示す
-const MORE_SUBJECTS = [
-  {
-    title: "英語",
-    icon: <FaLanguage aria-hidden="true" />,
-    color: "var(--subject-english)",
-  },
-  {
-    title: "国語",
-    icon: <FaBook aria-hidden="true" />,
-    color: "var(--subject-japanese)",
-  },
-  {
-    title: "理科",
-    icon: <FaFlask aria-hidden="true" />,
-    color: "var(--subject-science)",
-  },
-  {
-    title: "社会",
-    icon: <FaLandmark aria-hidden="true" />,
-    color: "var(--subject-social)",
-  },
-  {
-    title: "AI作成",
-    icon: <FaRobot aria-hidden="true" />,
-    color: "var(--subject-ai)",
-  },
-];
 
 const HOME_FEATURES = [
   {
@@ -202,37 +167,25 @@ function HomePage() {
     <>
       {/* このページだけはLPとして下に長いので、FlowStepperは固定せず一緒にスクロールさせる */}
       <FlowStepper current="subject" />
-      <div className="page-intro">
-        <h1>算数・数学の問題プリントを無料で自動生成</h1>
-        <p>
-          学年・単元・問題数を選ぶだけで、毎回新しい算数・数学プリントを自動生成。解答つきでそのまま印刷・PDF保存できます。
-        </p>
+      <div className="home-hero">
+        <div className="page-intro">
+          <h1>算数・数学の問題プリントを無料で自動生成</h1>
+          <p>
+            学年・単元・問題数を選ぶだけで、毎回新しい算数・数学プリントを自動生成。解答つきでそのまま印刷・PDF保存できます。
+          </p>
+        </div>
+        <div className="home-subject-single">
+          <SubjectCard
+            title="数学"
+            color="var(--subject-math)"
+            imageSrc={subjectCardImages.math}
+            to="/grade-select"
+            onClick={() => {
+              trackSubjectSelected({ subject: "math" });
+            }}
+          />
+        </div>
       </div>
-      <div className="home-subject-single">
-        <SubjectCard
-          title="数学"
-          color="var(--subject-math)"
-          imageSrc={subjectCardImages.math}
-          to="/grade-select"
-          onClick={() => {
-            trackSubjectSelected({ subject: "math" });
-          }}
-        />
-      </div>
-      <p className="home-more-subjects-note">他の教科は準備中です</p>
-      <ul className="home-more-subjects-list">
-        {MORE_SUBJECTS.map((subject) => (
-          <li key={subject.title} className="home-more-subjects-chip">
-            <span
-              className="home-more-subjects-icon"
-              style={{ background: subject.color }}
-            >
-              {subject.icon}
-            </span>
-            {subject.title}
-          </li>
-        ))}
-      </ul>
 
       <section className="home-section" aria-labelledby="home-features-heading">
         <h2 id="home-features-heading">math²ドリルでできること</h2>
